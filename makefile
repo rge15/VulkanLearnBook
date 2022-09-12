@@ -1,7 +1,7 @@
 ############################
 #### MAKE VARS
 ############################
-APP 	:= engine
+APP 	:= app
 CC 		:= g++
 CCFLAGS := -Wall -pedantic -std=c++20 -g
 C		:= gcc
