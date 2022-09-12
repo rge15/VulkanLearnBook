@@ -1,23 +1,18 @@
 #include "../utilities/config.hpp"
-#include <GLFW/glfw3.h>
-
+#include "../utilities/assertMacros.hpp"
+#include "VDriver.hpp"
 class VEngine
 {
 private:
-	uint32_t _width, _height;
 
-	GLFWwindow* _window {nullptr};
-
-	VkInstance* _vkinstance {nullptr};
+	std::unique_ptr<VDriver> _VDriver { nullptr };
 
 public:
 
-	VEngine(const uint32_t p_w = 640, const uint32_t p_h = 480 ) noexcept;
+	VEngine( const uint32_t p_w = 640, const uint32_t p_h = 480 ) noexcept;
 
 	~VEngine() noexcept;
 
-	void createWindow() noexcept;
-
-	void createVKInstance() noexcept;
+	GLFWwindow& getWindow() const noexcept;
 
 };

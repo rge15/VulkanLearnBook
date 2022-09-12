@@ -1,2 +1,5 @@
+// Common includes
 #include <iostream>
-#include <vulkan/vulkan.hpp>
+#include <memory>
+#include <array>
+#include <assert.h>

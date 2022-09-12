@@ -3,10 +3,10 @@
 ############################
 APP 	:= engine
 CC 		:= g++
-CCFLAGS := -Wall -pedantic -std=c++20
+CCFLAGS := -Wall -pedantic -std=c++20 -g
 C		:= gcc
 CFLAGS 	:=
-LIBS 	:= -lglfw -lvulkan
+LIBS 	:= -lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi
 
 .PHONY: info
 

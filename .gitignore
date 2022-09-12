@@ -31,8 +31,11 @@
 *.out
 *.app
 
+# VSC Files
+.vscode/
+
+# Binaries
 obj/
-
 out/build/
-
 [Bb][Ui][Ii][Ll][Dd]
+engine
