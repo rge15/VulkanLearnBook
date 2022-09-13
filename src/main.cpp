@@ -3,7 +3,7 @@
 
 int main()
 {
-	VEngine engine{};
+	Graphics::VEngine engine{};
 
 	GLFWwindow& wind = engine.getWindow();
 

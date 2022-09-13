@@ -1,6 +1,10 @@
 #include "../utilities/config.hpp"
 #include "../utilities/assertMacros.hpp"
 #include "VDriver.hpp"
+
+namespace Graphics
+{
+
 class VEngine
 {
 private:
@@ -16,3 +20,5 @@ public:
 	GLFWwindow& getWindow() const noexcept;
 
 };
+
+}
