@@ -7,6 +7,7 @@ int main()
 
 	GLFWwindow& wind = engine.getWindow();
 
+
 	while(!glfwWindowShouldClose(&wind))
 	{
 		glfwPollEvents();

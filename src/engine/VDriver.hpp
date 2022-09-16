@@ -1,8 +1,8 @@
 #include "../utilities/assertMacros.hpp" 
 #include "../utilities/config.hpp"
 #include "../utilities/graphicsInclude.hpp"
-#include "VKObjects/LogVKObjects.hpp"
-#include "VKObjects/GetVKObjects.hpp"
+#include "VKObjects/Helpers/LogVKObjects.hpp"
+#include "VKObjects/Helpers/GetVKObjects.hpp"
 
 //VK Objects Includes
 namespace Graphics
@@ -15,9 +15,9 @@ namespace Graphics
 		uint32_t _width{ 800 }, _height{ 400 };
 
 		//Vulkan Instance pre-initialized
-		VkInstance  _vkInstance {nullptr};
+		VkInstance  _vkInstance { VK_NULL_HANDLE };
 		//Vulkan Logical Device pre-initialized
-		VkDevice	_vkDevice	{nullptr};
+		VkDevice	_vkDevice	{ VK_NULL_HANDLE };
 
 		//GLFWWindow uniqPtr handler pre-initialized
 		std::unique_ptr<GLFWwindow, void (*)(GLFWwindow*) > _window { nullptr , nullptr };

@@ -72,8 +72,8 @@ namespace Graphics
 	VDriver::createVKInstance() noexcept
 	{
 		VkResult result;
-		VkInstanceCreateInfo 	instInfo 	{};
-		VkApplicationInfo		appInfo 	{};
+		VkInstanceCreateInfo 	instInfo {};
+		VkApplicationInfo		appInfo  {};
 
 		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 		appInfo.pNext = {nullptr};
