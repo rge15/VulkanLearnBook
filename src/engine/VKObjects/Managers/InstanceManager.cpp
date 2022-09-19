@@ -1,16 +1,16 @@
 #include "InstanceManager.hpp"
 
-namespace Graphics::Managers
+namespace Graphics::Manager
 {
 
 	Instance::Instance(
-		char* p_appName = "App", char* p_engineName = "Engine",
-		uint32_t appVer = 1, uint32_t engineVer = 1 ) noexcept
+		string p_appName, string p_engineName,
+		uint32_t appVer, uint32_t engineVer) noexcept
 	{
 		_appInfo.sType = { VK_STRUCTURE_TYPE_APPLICATION_INFO };
 		_appInfo.pNext = { nullptr };
-		_appInfo.pEngineName = { p_engineName };
-		_appInfo.pApplicationName = { p_appName };
+		_appInfo.pEngineName = { p_engineName.data() };
+		_appInfo.pApplicationName = { p_appName.data() };
 		_appInfo.applicationVersion = { appVer };
 		_appInfo.engineVersion = { engineVer };
 		_appInfo.apiVersion = { VK_MAKE_VERSION(1,0,0) };
@@ -20,10 +20,19 @@ namespace Graphics::Managers
 
 	}
 
+	//-------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
+
 	Instance::~Instance() noexcept
 	{
-
+		vkDestroyInstance(
+			_instance,
+			nullptr
+		);
 	}
+
+	//-------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 
 	void Instance::initInstance() noexcept
 	{
@@ -39,6 +48,9 @@ namespace Graphics::Managers
 			std::cout << "Bien creada la instancia crack, a ver los device" << std::endl;
 	}
 
+	//-------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
+
 	void Instance::initInstanceData() noexcept
 	{
 		_instanceInfo.sType = { VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO };
@@ -50,4 +62,5 @@ namespace Graphics::Managers
 		_instanceInfo.ppEnabledExtensionNames = { VK_NO_EXTENSIONS };
 		_instanceInfo.ppEnabledLayerNames = { VK_NO_LAYERS };
 	}
+
 }

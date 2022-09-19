@@ -7,7 +7,7 @@
 //TODO : y convertir los dos como Uniq_ptr en el VDriver.hpp
 
 
-namespace Graphics::Managers
+namespace Graphics::Manager
 {
 	class Instance{
 		private:
@@ -19,11 +19,16 @@ namespace Graphics::Managers
 		public:
 
 			Instance(
-				char* p_appName = "App", char* p_engineName = "Engine",
+				string p_appName = "App", string p_engineName = "Engine",
 				uint32_t appVer = 1, uint32_t engineVer = 1
 			) noexcept;
 
 			~Instance() noexcept;
+
+			VkInstance& getInstance()
+			{
+				return _instance;
+			}
 
 		private:
 

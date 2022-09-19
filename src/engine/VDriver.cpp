@@ -8,8 +8,6 @@ namespace Graphics
 	{
 		initGLFW();
 		createWindow();
-		createVKInstance();
-		createVKPhDevice();
 	}
 
 	//-------------------------------------------------------------------------
@@ -17,20 +15,6 @@ namespace Graphics
 
 	VDriver::~VDriver()
 	{
-		VkResult result = vkDeviceWaitIdle( _vkDevice );
-
-		ASSERT( result == VK_SUCCESS, "Error waitid DEvices for destruction" )
-
-		vkDestroyDevice(
-			_vkDevice,
-			nullptr
-		);
-
-		vkDestroyInstance(
-			_vkInstance,
-			nullptr
-		);
-
 	}
 
 	//-------------------------------------------------------------------------
@@ -63,109 +47,6 @@ namespace Graphics
 			std::cout << "Window creation failed" << std::endl;
 
 		_window = std::move(window);
-	}
-
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-
-	void 
-	VDriver::createVKInstance() noexcept
-	{
-		VkResult result;
-		VkInstanceCreateInfo 	instInfo {};
-		VkApplicationInfo		appInfo  {};
-
-		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-		appInfo.pNext = {nullptr};
-		appInfo.pApplicationName = {"App"};
-		appInfo.applicationVersion = 1;
-		appInfo.engineVersion = 1;
-		appInfo.pEngineName = {"Engine 0.1"};
-		appInfo.apiVersion = VK_MAKE_VERSION(1,0,0);
-
-		instInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-		instInfo.pApplicationInfo = &appInfo;
-		instInfo.pNext = {nullptr};
-		// In next chapters we will learn about these flags
-		instInfo.flags = {0};
-		instInfo.enabledLayerCount = {0};
-		instInfo.ppEnabledLayerNames = {nullptr};
-		instInfo.enabledExtensionCount = {0};
-		instInfo.ppEnabledExtensionNames = {nullptr};
-
-		result = vkCreateInstance(
-			&instInfo,
-			nullptr,
-			&_vkInstance
-		);
-
-		ASSERT( result == VK_SUCCESS, "Errors creating VK Instance ;c")
-
-		if(	result == VK_SUCCESS )
-			std::cout << "Bien creada la instancia crack, a ver los device" << std::endl;
-
-	}
-
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-
-	void
-	VDriver::createVKPhDevice() noexcept
-	{
-
-		ASSERT(_vkInstance, "Create a Instance before fetching Physical Devices Sir")
-
-		//Aquí conseguimos todos los physical devices del ordenador
-		std::vector<VkPhysicalDevice> vkPhDevices;
-
-		GetPhysicalDevices( _vkInstance, vkPhDevices );
-		
-		//? Logging Physical Devices Properties & Memories
-		Logger::PrintDevicesMemoAndProperties( vkPhDevices );
-
-		VkDeviceCreateInfo deviceInfo{};
-		VkPhysicalDeviceFeatures supportedFeatures{}, requiredFeatures{};
-		VkDeviceQueueCreateInfo queueInfo{};
-
-		vkGetPhysicalDeviceFeatures(
-			vkPhDevices[0],
-			&supportedFeatures
-		);
-
-		requiredFeatures.multiDrawIndirect = supportedFeatures.multiDrawIndirect;
-		requiredFeatures.geometryShader = VK_TRUE;
-		requiredFeatures.tessellationShader = VK_TRUE;
-
-		queueInfo.sType = {VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO};
-		queueInfo.pNext = {nullptr};
-		queueInfo.queueCount = {1};
-		queueInfo.flags = {0};
-		queueInfo.queueFamilyIndex = {0};
-		queueInfo.pQueuePriorities = {nullptr};
-
-		deviceInfo.sType = {VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO};
-		deviceInfo.pNext = {nullptr};
-		deviceInfo.flags = {0};
-		deviceInfo.enabledLayerCount = {0};
-		deviceInfo.enabledExtensionCount = {0};
-		deviceInfo.ppEnabledExtensionNames = {nullptr};
-		deviceInfo.ppEnabledLayerNames = {nullptr};
-		deviceInfo.queueCreateInfoCount = {1};
-		deviceInfo.pQueueCreateInfos = {&queueInfo};
-		deviceInfo.pEnabledFeatures = {&requiredFeatures};
-
-		auto result = vkCreateDevice(
-			vkPhDevices[0],
-			&deviceInfo,
-			nullptr,
-			&_vkDevice
-		);
-
-		ASSERT( result == VK_SUCCESS, "Problems creating the logical Device men")
-
-		if(result == VK_SUCCESS)
-			std::cout << "Bien creado el Logical device. Well Done." << std::endl;
-
 	}
 
 	//-------------------------------------------------------------------------

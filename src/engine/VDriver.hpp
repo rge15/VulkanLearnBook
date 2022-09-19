@@ -3,6 +3,8 @@
 #include "../utilities/graphicsInclude.hpp"
 #include "VKObjects/Helpers/LogVKObjects.hpp"
 #include "VKObjects/Helpers/GetVKObjects.hpp"
+#include "VKObjects/Managers/DeviceManager.hpp"
+#include "VKObjects/Managers/InstanceManager.hpp"
 
 //VK Objects Includes
 namespace Graphics
@@ -11,13 +13,17 @@ namespace Graphics
 	{
 
 	private:
+	
+		//Using's for legibility
+		using Instance = Manager::Instance;
+		using Device = Manager::Device;
+	
 		//Width and heigth for the screen size
 		uint32_t _width{ 800 }, _height{ 400 };
 
-		//Vulkan Instance pre-initialized
-		VkInstance  _vkInstance { VK_NULL_HANDLE };
-		//Vulkan Logical Device pre-initialized
-		VkDevice	_vkDevice	{ VK_NULL_HANDLE };
+		//UniquePtr for managing the Vulkan Instantce and physicalDevice
+		std::unique_ptr<Instance> _vkInstanceManager { std::make_unique<Instance>() };
+		std::unique_ptr<Device> _vkDeviceManager { std::make_unique<Device>( _vkInstanceManager->getInstance() ) };
 
 		//GLFWWindow uniqPtr handler pre-initialized
 		std::unique_ptr<GLFWwindow, void (*)(GLFWwindow*) > _window { nullptr , nullptr };
@@ -71,23 +77,6 @@ namespace Graphics
 		*/
 		void createWindow() noexcept;
 
-		/**
-		 * 	@brief	Verbose method that creates the Vulkan
-		 * 			instance. It gathers all the necessary info
-		 * 			for creating the Instance.
-		 * 
-		 * 			Right Now it doen't enable any layer or extension
-		*/
-		void createVKInstance() noexcept;
-
-		/**
-		 * 	@brief	Verbose method that creates the Vulkan
-		 * 			logical device. It gathers all the necessary info
-		 * 			for creating the Instance.
-		 * 
-		 * 			Right Now it doen't enable any layer or extension.
-		*/
-		void createVKPhDevice() noexcept;
 	};
 
 }
