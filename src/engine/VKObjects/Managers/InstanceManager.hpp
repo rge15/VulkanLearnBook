@@ -1,11 +1,7 @@
-#include "../../../utilities/config.hpp"
-#include "../../../utilities/TypeAliases.hpp"
-#include "../../../utilities/assertMacros.hpp"
-#include <vulkan/vulkan.h>
-
-//TODO : Ahora vamos a hacer lo mismo que hemos hecho con este manager pero para el physical device
-//TODO : y convertir los dos como Uniq_ptr en el VDriver.hpp
-
+#include <utilities/config.hpp>
+#include <utilities/TypeAliases.hpp>
+#include <utilities/assertMacros.hpp>
+#include <utilities/graphicsInclude.hpp>
 
 namespace Graphics::Manager
 {

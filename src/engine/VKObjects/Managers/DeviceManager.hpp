@@ -1,6 +1,6 @@
-#include "../../../utilities/config.hpp"
-#include "../../../utilities/TypeAliases.hpp"
-#include "../../../utilities/assertMacros.hpp"
+#include <utilities/config.hpp>
+#include <utilities/TypeAliases.hpp>
+#include <utilities/assertMacros.hpp>
 #include "../Helpers/GetVKObjects.hpp"
 #include <vulkan/vulkan.h>
 

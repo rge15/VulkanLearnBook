@@ -1,5 +1,5 @@
-#include "../utilities/config.hpp"
-#include "../utilities/assertMacros.hpp"
+#include <utilities/config.hpp>
+#include <utilities/assertMacros.hpp>
 #include "VDriver.hpp"
 
 namespace Graphics

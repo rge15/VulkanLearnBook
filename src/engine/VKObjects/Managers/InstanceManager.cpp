@@ -53,13 +53,18 @@ namespace Graphics::Manager
 
 	void Instance::initInstanceData() noexcept
 	{
+		uint32_t glfwCountExtension {0};
+		const char** glfwExtensions;
+
+		glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwCountExtension);
+
 		_instanceInfo.sType = { VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO };
 		_instanceInfo.pNext = { nullptr };
 		_instanceInfo.pApplicationInfo = { &_appInfo };
 		_instanceInfo.flags = { 0 };
-		_instanceInfo.enabledExtensionCount = { 0 };
+		_instanceInfo.enabledExtensionCount = { glfwCountExtension };
 		_instanceInfo.enabledLayerCount = { 0 };
-		_instanceInfo.ppEnabledExtensionNames = { VK_NO_EXTENSIONS };
+		_instanceInfo.ppEnabledExtensionNames = { glfwExtensions };
 		_instanceInfo.ppEnabledLayerNames = { VK_NO_LAYERS };
 	}
 

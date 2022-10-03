@@ -1,10 +1,9 @@
-#include "../utilities/assertMacros.hpp" 
-#include "../utilities/config.hpp"
-#include "../utilities/graphicsInclude.hpp"
+#include <utilities/assertMacros.hpp> 
+#include <utilities/config.hpp>
 #include "VKObjects/Helpers/LogVKObjects.hpp"
 #include "VKObjects/Helpers/GetVKObjects.hpp"
-#include "VKObjects/Managers/DeviceManager.hpp"
 #include "VKObjects/Managers/InstanceManager.hpp"
+#include "VKObjects/Managers/DeviceManager.hpp"
 
 //VK Objects Includes
 namespace Graphics
@@ -22,8 +21,8 @@ namespace Graphics
 		uint32_t _width{ 800 }, _height{ 400 };
 
 		//UniquePtr for managing the Vulkan Instantce and physicalDevice
-		std::unique_ptr<Instance> _vkInstanceManager { std::make_unique<Instance>() };
-		std::unique_ptr<Device> _vkDeviceManager { std::make_unique<Device>( _vkInstanceManager->getInstance() ) };
+		std::unique_ptr<Instance> _vkInstanceManager { nullptr };
+		std::unique_ptr<Device> _vkDeviceManager { nullptr };
 
 		//GLFWWindow uniqPtr handler pre-initialized
 		std::unique_ptr<GLFWwindow, void (*)(GLFWwindow*) > _window { nullptr , nullptr };

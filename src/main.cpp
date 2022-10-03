@@ -1,17 +1,10 @@
-#include "engine/VEngine.hpp"
-#include "utilities/assertMacros.hpp"
+#include "Application/HelloTriangleApp.hpp"
 
 int main()
 {
-	Graphics::VEngine engine{};
+	HelloTriangleApp app{};
 
-	GLFWwindow& wind = engine.getWindow();
-
-
-	while(!glfwWindowShouldClose(&wind))
-	{
-		glfwPollEvents();
-	}
+	app.runApp();
 
 	return 0;
 }

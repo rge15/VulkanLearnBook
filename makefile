@@ -7,6 +7,7 @@ CCFLAGS := -Wall -pedantic -std=c++20 -g
 C		:= gcc
 CFLAGS 	:=
 LIBS 	:= -lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi
+INCDIRS := -Isrc
 
 .PHONY: info
 
@@ -55,9 +56,9 @@ OBJDIRS := $(patsubst $(SRC)%,$(OBJ)%,$(SRCDIRS))
 $(APP) : $(OBJDIRS) $(ALLOBJS)
 	$(CC) -o $(APP) $(ALLOBJS) $(CCFLAGS) $(LIBS)
 
-$(foreach F,$(ALLCPPS),$(eval $(call COMPILE,$(F),$(call C20,$(F)),$(call C2H,$(F)),$(CC),$(CCFLAGS))))
+$(foreach F,$(ALLCPPS),$(eval $(call COMPILE,$(F),$(call C20,$(F)),$(call C2H,$(F)),$(CC),$(CCFLAGS) $(INCDIRS))))
 
-$(foreach F,$(ALLCS),$(eval $(call COMPILE,$(F),$(call C20,$(F)),$(call C2H,$(F)),$(C),$(CFLAGS))))
+$(foreach F,$(ALLCS),$(eval $(call COMPILE,$(F),$(call C20,$(F)),$(call C2H,$(F)),$(C),$(CFLAGS) $(INCDIRS))))
 
 $(OBJDIRS) :
 	$(shell $(MKDIR) $(OBJDIRS))

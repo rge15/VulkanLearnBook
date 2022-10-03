@@ -8,6 +8,10 @@ namespace Graphics
 	{
 		initGLFW();
 		createWindow();
+	
+		_vkInstanceManager = std::make_unique<Instance>();
+		_vkDeviceManager = std::make_unique<Device>( _vkInstanceManager->getInstance() );
+
 	}
 
 	//-------------------------------------------------------------------------
