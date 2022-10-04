@@ -1,8 +1,7 @@
 #include "../engine/VEngine.hpp"
-#include "../utilities/assertMacros.hpp"
+#include "App.hpp"
 
-
-class HelloTriangleApp
+class HelloTriangleApp : public App
 {
 	private:
 		Graphics::VEngine engine{};
@@ -17,5 +16,5 @@ class HelloTriangleApp
 		HelloTriangleApp(/* args */);
 		~HelloTriangleApp();
 
-		void runApp() noexcept;
+		void runApp() noexcept override final;
 };

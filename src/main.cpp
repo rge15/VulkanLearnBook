@@ -2,9 +2,9 @@
 
 int main()
 {
-	HelloTriangleApp app{};
+	std::unique_ptr<App> app = std::make_unique<HelloTriangleApp>();
 
-	app.runApp();
+	app.get()->runApp();
 
 	return 0;
 }
