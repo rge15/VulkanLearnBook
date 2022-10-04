@@ -1,13 +1,18 @@
+ifndef
+	config=debug
+endif
+
 ############################
 #### MAKE VARS
 ############################
 APP 	:= app
 CC 		:= g++
-CCFLAGS := -Wall -pedantic -std=c++20 -g
+CCFLAGS := -Wall -pedantic -std=c++20
 C		:= gcc
 CFLAGS 	:=
 LIBS 	:= -lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi
 INCDIRS := -Isrc
+DEFINES :=
 
 .PHONY: info
 
@@ -17,6 +22,19 @@ INCDIRS := -Isrc
 MKDIR 	:= mkdir -p
 SRC 	:= src
 OBJ 	:= obj
+
+############################
+#### BUILD CONFIG
+############################
+ifeq ($(config),debug)
+	DEFINES += -DDEBUG
+	CCFLAGS += -g
+else ifeq ($(config),release)
+	DEFINES += -DRELEASE
+	CCFLAGS += -O3
+else
+	$(error "Invalid config type $(config). Set config to debug or realease")
+endif
 
 ############################
 #### GENERATED MACROS
@@ -56,9 +74,9 @@ OBJDIRS := $(patsubst $(SRC)%,$(OBJ)%,$(SRCDIRS))
 $(APP) : $(OBJDIRS) $(ALLOBJS)
 	$(CC) -o $(APP) $(ALLOBJS) $(CCFLAGS) $(LIBS)
 
-$(foreach F,$(ALLCPPS),$(eval $(call COMPILE,$(F),$(call C20,$(F)),$(call C2H,$(F)),$(CC),$(CCFLAGS) $(INCDIRS))))
+$(foreach F,$(ALLCPPS),$(eval $(call COMPILE,$(F),$(call C20,$(F)),$(call C2H,$(F)),$(CC),$(CCFLAGS) $(INCDIRS) $(DEFINES))))
 
-$(foreach F,$(ALLCS),$(eval $(call COMPILE,$(F),$(call C20,$(F)),$(call C2H,$(F)),$(C),$(CFLAGS) $(INCDIRS))))
+$(foreach F,$(ALLCS),$(eval $(call COMPILE,$(F),$(call C20,$(F)),$(call C2H,$(F)),$(C),$(CFLAGS) $(INCDIRS) $(DEFINES))))
 
 $(OBJDIRS) :
 	$(shell $(MKDIR) $(OBJDIRS))
