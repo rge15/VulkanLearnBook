@@ -72,7 +72,7 @@ namespace Graphics
 				nullptr
 			);
 
-			deviceQueue.resize(countQueues);
+			deviceQueue.reserve(countQueues);
 
 			vkGetPhysicalDeviceQueueFamilyProperties(
 				device,

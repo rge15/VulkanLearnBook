@@ -63,9 +63,60 @@ namespace Graphics::Manager
 		_instanceInfo.pApplicationInfo = { &_appInfo };
 		_instanceInfo.flags = { 0 };
 		_instanceInfo.enabledExtensionCount = { glfwCountExtension };
-		_instanceInfo.enabledLayerCount = { 0 };
 		_instanceInfo.ppEnabledExtensionNames = { glfwExtensions };
+
+#ifdef DEBUG
+		setLayerInfo();
+#else
+		_instanceInfo.enabledLayerCount = { 0 };
 		_instanceInfo.ppEnabledLayerNames = { VK_NO_LAYERS };
+#endif
 	}
 
+	//-------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
+
+#ifdef DEBUG
+	void Instance::setLayerInfo() noexcept
+	{
+		uint32_t layerCount { 0 };
+		vkEnumerateInstanceLayerProperties( &layerCount, nullptr);
+		std::vector<VkLayerProperties> layers( layerCount );
+		vkEnumerateInstanceLayerProperties( &layerCount, layers.data());
+	
+		checkAndSetLayers( layers );
+	}
+#endif
+
+	//-------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
+
+#ifdef DEBUG
+	void Instance::checkAndSetLayers(const std::vector<VkLayerProperties>& p_availibleLayers ) noexcept
+	{
+		bool layerFound { false };
+		for(auto& neededLayer : _validationLayers)
+		{
+			layerFound = false;
+			for(auto& availibleLayer : p_availibleLayers)
+			{
+				if( std::strcmp( neededLayer, availibleLayer.layerName ) == 0 )
+				{
+					std::cout << "Layer " << neededLayer << " in use ;D" << std::endl;
+					layerFound = true;
+					break;
+				}
+			}
+
+			if( !layerFound )
+			{
+				std::cout << "Layer named : " << neededLayer << " is not suported." << std::endl;
+				ASSERT( layerFound, "Layer specified not supported ;c")
+			}
+		}
+
+		_instanceInfo.enabledLayerCount = { (uint32_t)_validationLayers.size() };
+		_instanceInfo.ppEnabledLayerNames = { _validationLayers.data() };
+	}
+#endif
 }

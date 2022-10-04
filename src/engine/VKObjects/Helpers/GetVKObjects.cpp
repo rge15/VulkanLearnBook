@@ -14,7 +14,7 @@ namespace Graphics
 			nullptr
 		);
 
-		phDevices.resize(devicesCount);
+		phDevices.reserve(devicesCount);
 
 		vkEnumeratePhysicalDevices(
 			instance,

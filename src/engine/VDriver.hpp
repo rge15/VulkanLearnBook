@@ -20,12 +20,12 @@ namespace Graphics
 		//Width and heigth for the screen size
 		uint32_t _width{ 800 }, _height{ 400 };
 
+		//GLFWWindow uniqPtr handler pre-initialized
+		std::unique_ptr<GLFWwindow, void (*)(GLFWwindow*) > _window { nullptr , nullptr };
+
 		//UniquePtr for managing the Vulkan Instantce and physicalDevice
 		std::unique_ptr<Instance> _vkInstanceManager { nullptr };
 		std::unique_ptr<Device> _vkDeviceManager { nullptr };
-
-		//GLFWWindow uniqPtr handler pre-initialized
-		std::unique_ptr<GLFWwindow, void (*)(GLFWwindow*) > _window { nullptr , nullptr };
 
 	public:
 

@@ -12,6 +12,13 @@ namespace Graphics::Manager
 			VkInstanceCreateInfo _instanceInfo {};
 			VkInstance _instance { VK_NULL_HANDLE };
 
+#ifdef DEBUG
+			const std::vector<const char*> _validationLayers = 
+			{
+				"VK_LAYER_KHRONOS_validation"
+			};
+#endif
+
 		public:
 
 			Instance(
@@ -32,5 +39,12 @@ namespace Graphics::Manager
 
 			void initInstance() noexcept;
 
+#ifdef DEBUG
+			void setLayerInfo() noexcept;
+#endif
+
+#ifdef DEBUG
+			void checkAndSetLayers(const std::vector<VkLayerProperties>& p_availibleLayers ) noexcept;
+#endif
 	};
 }
