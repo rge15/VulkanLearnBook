@@ -1,3 +1,4 @@
+#pragma once
 #include <utilities/config.hpp>
 #include <utilities/TypeAliases.hpp>
 #include <utilities/assertMacros.hpp>
@@ -31,6 +32,11 @@ namespace Graphics::Manager
 			VkInstance& getInstance()
 			{
 				return _instance;
+			}
+
+			VkInstanceCreateInfo& getInstanceInfo()
+			{
+				return _instanceInfo;
 			}
 
 		private:

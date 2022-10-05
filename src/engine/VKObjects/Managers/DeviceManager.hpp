@@ -2,6 +2,8 @@
 #include <utilities/TypeAliases.hpp>
 #include <utilities/assertMacros.hpp>
 #include "../Helpers/GetVKObjects.hpp"
+#include "utils/QueueFamilyInfo.hpp"
+#include "InstanceManager.hpp"
 #include <vulkan/vulkan.h>
 
 
@@ -11,19 +13,23 @@ namespace Graphics::Manager
 	{
 		private:
 
-			VkInstance& _engineInstance;
+			Instance& _engineInstance;
 
 			VkDevice _device { VK_NULL_HANDLE };
 
 			VkPhysicalDevice _phDevice { VK_NULL_HANDLE };
 
-			VkDeviceCreateInfo _deviceInfo {};
-			VkPhysicalDeviceFeatures _deviceFeature {};
-			VkDeviceQueueCreateInfo _queueInfo {};
+			VkDeviceCreateInfo 			_deviceInfo 	{};
+			VkPhysicalDeviceFeatures 	_deviceFeature 	{};
+			VkDeviceQueueCreateInfo 	_queueInfo 		{};
+			QueueFamilyInfo 			_queueIndexInfo	{};
+
+			//?Entiendo que el manejador de la QUEUE tendrá que ir en una clase aparte para hacer paridas de colas
+			VkQueue	_queueHandler {};
 
 		public:
 
-			Device( VkInstance& p_vkInstance )	noexcept;
+			Device( Instance& p_vkInstance )	noexcept;
 
 			~Device() noexcept;
 
@@ -38,5 +44,7 @@ namespace Graphics::Manager
 			void initCreationInfo() noexcept;
 
 			void createDevice() noexcept;
+
+			void getQueueHandler() noexcept;
 	};
 }
