@@ -41,7 +41,7 @@ namespace Graphics::Manager
 
 	void Device::getPhysicalDevice() noexcept
 	{
-		std::vector<VkPhysicalDevice> devices;
+		std::vector<VkPhysicalDevice> devices{};
 
 		getPhysicalDevices( _engineInstance.getInstance(), devices );
 
@@ -70,23 +70,28 @@ namespace Graphics::Manager
 
 	void Device::initQueueCreateInfo() noexcept
 	{
-		getPhysicalDeviceQueue(_phDevice, _queueIndexInfo);
+		//TODO : Esto se puede conceptualizar seguro
+		std::vector<VkQueueFamilyProperties> queueProp {};
+		getPhysicalDeviceQueueProperties( _phDevice , queueProp );
 
-		_queueIndexInfo._priorityValue = 1.0f;
+		_queueIndexInfo.pickBestPhysicalDeviceQueues(queueProp, _surface, _phDevice);
 
-		if( _queueIndexInfo.isComplete() )
-			_queueInfo.queueFamilyIndex = _queueIndexInfo._graphicsFamilyQueueIndex.value();
-		else
+		std::set<uint32_t> queueIndex {};
+		_queueIndexInfo.getSetIndex(queueIndex);
+
+		_queueInfo.resize( queueIndex.size() );
+
+		int i = 0;
+		for(auto queueID : queueIndex)
 		{
-			std::cout << "Non graphical queue found in the physical Device selected." << std::endl;
-			_queueInfo.queueFamilyIndex = 0;
+			_queueInfo[i].sType = {VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO};
+			_queueInfo[i].pNext = {nullptr};
+			_queueInfo[i].queueCount = {1};
+			_queueInfo[i].flags = {0};
+			_queueInfo[i].pQueuePriorities = &_queueIndexInfo._priorityValue;
+			_queueInfo[i].queueFamilyIndex = queueID;
+			++i;
 		}
-
-		_queueInfo.sType = {VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO};
-		_queueInfo.pNext = {nullptr};
-		_queueInfo.queueCount = {1};
-		_queueInfo.flags = {0};
-		_queueInfo.pQueuePriorities = &_queueIndexInfo._priorityValue;
 	}
 
 	//-------------------------------------------------------------------------
@@ -101,8 +106,10 @@ namespace Graphics::Manager
 		_deviceInfo.flags = {0};
 		_deviceInfo.enabledExtensionCount = {0};
 		_deviceInfo.ppEnabledExtensionNames = {nullptr};
-		_deviceInfo.queueCreateInfoCount = {1};
-		_deviceInfo.pQueueCreateInfos = {&_queueInfo};
+		
+		_deviceInfo.queueCreateInfoCount = {(uint32_t)_queueInfo.size()};
+		_deviceInfo.pQueueCreateInfos = {_queueInfo.data()};
+
 		_deviceInfo.pEnabledFeatures = {&_deviceFeature};
 		_deviceInfo.enabledLayerCount = instanceInfo.enabledLayerCount;
 		_deviceInfo.ppEnabledLayerNames = instanceInfo.ppEnabledLayerNames;

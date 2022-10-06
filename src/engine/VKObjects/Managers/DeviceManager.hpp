@@ -20,13 +20,14 @@ namespace Graphics::Manager
 
 			VkPhysicalDevice _phDevice { VK_NULL_HANDLE };
 
-			VkDeviceCreateInfo 			_deviceInfo 	{};
-			VkPhysicalDeviceFeatures 	_deviceFeature 	{};
-			VkDeviceQueueCreateInfo 	_queueInfo 		{};
-			QueueFamilyInfo 			_queueIndexInfo	{};
+			VkDeviceCreateInfo 						_deviceInfo 	{};
+			VkPhysicalDeviceFeatures 				_deviceFeature 	{};
+			std::vector<VkDeviceQueueCreateInfo>	_queueInfo 		{};
+			QueueFamilyInfo 						_queueIndexInfo	{};
 
 			//?Entiendo que el manejador de la QUEUE tendrá que ir en una clase aparte para hacer paridas de colas
 			VkQueue	_queueHandler {};
+			//?Entiendo que el manejador de la SURFACE tendrá que ir en una clase aparte para hacer paridas de colas
 			VkSurfaceKHR _surface {};
 
 		public:

@@ -61,7 +61,7 @@ namespace Graphics
 	//-------------------------------------------------------------------------
 
 		void 
-		PrintPhysicalDeviceQueues( VkPhysicalDevice& device) noexcept
+		PrintPhysicalDeviceQueues( VkPhysicalDevice & device) noexcept
 		{
 			uint32_t countQueues {0};
 			std::vector<VkQueueFamilyProperties> deviceQueue;
@@ -72,13 +72,15 @@ namespace Graphics
 				nullptr
 			);
 
-			deviceQueue.reserve(countQueues);
+			deviceQueue.resize(countQueues);
 
 			vkGetPhysicalDeviceQueueFamilyProperties(
 				device,
 				&countQueues,
-				&deviceQueue[0]
+				deviceQueue.data()
 			);
+
+			std::cout << "Number of queues : " << countQueues << '\n' ;
 
 			for(auto& queue : deviceQueue)
 			{

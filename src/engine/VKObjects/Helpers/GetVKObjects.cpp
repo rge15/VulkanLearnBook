@@ -14,13 +14,16 @@ namespace Graphics
 			nullptr
 		);
 
-		p_phDevices.reserve(devicesCount);
+		ASSERT( (devicesCount > 0), "There's no available physical devices for the vulkan app." );
+
+		p_phDevices.resize(devicesCount);
 
 		vkEnumeratePhysicalDevices(
 			p_instance,
 			&devicesCount,
-			&p_phDevices[0]
+			p_phDevices.data()
 		);
+
 	}
 
 	//-----------------------------------------------------------------------------
@@ -36,39 +39,16 @@ namespace Graphics
 	//-----------------------------------------------------------------------------
 
 	void
-	getPhysicalDeviceQueue( VkPhysicalDevice& p_device, Manager::QueueFamilyInfo& p_queueIndex ) noexcept
+	getPhysicalDeviceQueueProperties( VkPhysicalDevice& p_device, std::vector<VkQueueFamilyProperties>& p_queueProp ) noexcept
 	{
-		uint32_t queueCount {};
+		uint32_t queueCount { 0 };
 
 		vkGetPhysicalDeviceQueueFamilyProperties( p_device, &queueCount, nullptr);
 
-		std::vector<VkQueueFamilyProperties> queueProperties(queueCount);
+		p_queueProp.resize(queueCount);
 
-		vkGetPhysicalDeviceQueueFamilyProperties( p_device, &queueCount, queueProperties.data());
-
-		pickBestPhysicalDeviceQueue( queueProperties, p_queueIndex);
+		vkGetPhysicalDeviceQueueFamilyProperties( p_device, &queueCount, p_queueProp.data());
 	}
 
-	//-----------------------------------------------------------------------------
-	//-----------------------------------------------------------------------------
-
-	void
-	pickBestPhysicalDeviceQueue(
-		const std::vector<VkQueueFamilyProperties>& p_queueProp,
-		Manager::QueueFamilyInfo& p_queueIndex
-	) noexcept
-	{
-		int i { 0 };
-		for(auto& prop : p_queueProp )
-		{
-			if( prop.queueFlags & VK_QUEUE_GRAPHICS_BIT)
-				p_queueIndex._graphicsFamilyQueueIndex = i;
-		
-			if( p_queueIndex.isComplete() )
-				break;
-		
-			++i;
-		}
-	}
-
+	
 }

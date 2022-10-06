@@ -1,6 +1,8 @@
+#pragma once
 #include <vulkan/vulkan.h>
 #include <utilities/config.hpp>
-#include "../Managers/utils/QueueFamilyInfo.hpp"
+#include <utilities/assertMacros.hpp>
+#include "LogVKObjects.hpp"
 
 namespace Graphics
 {
@@ -17,16 +19,9 @@ namespace Graphics
 	) noexcept;
 
 	void
-	getPhysicalDeviceQueue(
-		VkPhysicalDevice& device,
-		Manager::QueueFamilyInfo& queue
+	getPhysicalDeviceQueueProperties(
+		VkPhysicalDevice& p_device,
+		std::vector<VkQueueFamilyProperties>& p_queueProp
 	) noexcept;
-
-	void
-	pickBestPhysicalDeviceQueue(
-		const std::vector<VkQueueFamilyProperties>& p_queueProp,
-		Manager::QueueFamilyInfo& p_queueIndex
-	) noexcept;
-
 
 }
