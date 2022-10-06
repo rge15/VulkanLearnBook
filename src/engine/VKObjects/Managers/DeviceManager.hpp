@@ -14,6 +14,7 @@ namespace Graphics::Manager
 		private:
 
 			Instance& _engineInstance;
+			GLFWwindow& _window;
 
 			VkDevice _device { VK_NULL_HANDLE };
 
@@ -26,10 +27,11 @@ namespace Graphics::Manager
 
 			//?Entiendo que el manejador de la QUEUE tendrá que ir en una clase aparte para hacer paridas de colas
 			VkQueue	_queueHandler {};
+			VkSurfaceKHR _surface {};
 
 		public:
 
-			Device( Instance& p_vkInstance )	noexcept;
+			Device( Instance& p_vkInstance, GLFWwindow& p_window )	noexcept;
 
 			~Device() noexcept;
 
@@ -46,5 +48,7 @@ namespace Graphics::Manager
 			void createDevice() noexcept;
 
 			void getQueueHandler() noexcept;
+			
+			void getSurfaceDisplay() noexcept;
 	};
 }

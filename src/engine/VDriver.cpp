@@ -10,7 +10,7 @@ namespace Graphics
 		createWindow();
 	
 		_vkInstanceManager = std::make_unique<Instance>();
-		_vkDeviceManager = std::make_unique<Device>( *_vkInstanceManager.get() );
+		_vkDeviceManager = std::make_unique<Device>( *_vkInstanceManager.get(), *_window.get() );
 
 	}
 

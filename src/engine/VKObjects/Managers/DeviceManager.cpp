@@ -2,9 +2,10 @@
 
 namespace Graphics::Manager
 {
-	Device::Device( Instance& p_vkInstance ) noexcept
-	: _engineInstance { p_vkInstance }
+	Device::Device( Instance& p_vkInstance, GLFWwindow& p_window ) noexcept
+	: _engineInstance { p_vkInstance }, _window { p_window }
 	{
+		getSurfaceDisplay();
 		getPhysicalDevice();
 		initQueueCreateInfo();
 		initFeatureRequeriments();
@@ -21,6 +22,12 @@ namespace Graphics::Manager
 		VkResult result = vkDeviceWaitIdle( _device );
 
 		ASSERT( result == VK_SUCCESS, "Error waitid DEvices for destruction" )
+
+		vkDestroySurfaceKHR(
+			_engineInstance.getInstance(),
+			_surface,
+			nullptr
+		);
 
 		vkDestroyDevice(
 			_device,
@@ -123,5 +130,20 @@ namespace Graphics::Manager
 	void Device::getQueueHandler() noexcept
 	{
 		vkGetDeviceQueue( _device, _queueIndexInfo._graphicsFamilyQueueIndex.value(), 0, &_queueHandler);
+	}
+
+	//-------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
+
+	void Device::getSurfaceDisplay() noexcept
+	{
+		auto result = glfwCreateWindowSurface( 
+			_engineInstance.getInstance(),
+			&_window,
+			nullptr,
+			&_surface
+		);
+
+		ASSERT(result == VK_FALSE, " Error creating the surface for display ")
 	}
 }
