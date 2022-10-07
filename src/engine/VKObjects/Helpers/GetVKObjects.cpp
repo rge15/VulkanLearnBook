@@ -30,16 +30,10 @@ namespace Graphics
 	//-----------------------------------------------------------------------------
 
 	void
-	pickBestPhysicalDevice(const std::vector<VkPhysicalDevice>& p_phDevices, VkPhysicalDevice& p_device) noexcept
-	{
-		p_device = p_phDevices[0];
-	}
-
-	//-----------------------------------------------------------------------------
-	//-----------------------------------------------------------------------------
-
-	void
-	getPhysicalDeviceQueueProperties( VkPhysicalDevice& p_device, std::vector<VkQueueFamilyProperties>& p_queueProp ) noexcept
+	getPhysicalDeviceQueueProperties(
+		VkPhysicalDevice& p_device,
+		std::vector<VkQueueFamilyProperties>& p_queueProp
+	) noexcept
 	{
 		uint32_t queueCount { 0 };
 
@@ -50,5 +44,60 @@ namespace Graphics
 		vkGetPhysicalDeviceQueueFamilyProperties( p_device, &queueCount, p_queueProp.data());
 	}
 
-	
+	//-----------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------
+
+	void
+	getPhysicalDeviceAvailableExtensions( 
+		VkPhysicalDevice& p_device ,
+		std::vector<VkExtensionProperties>& p_extProp
+	) noexcept
+	{
+		uint32_t extCount { 0 };
+
+		vkEnumerateDeviceExtensionProperties( p_device, nullptr, &extCount, nullptr);
+
+		p_extProp.resize(extCount);
+
+		vkEnumerateDeviceExtensionProperties( p_device, nullptr, &extCount, p_extProp.data());	
+	}
+
+	//-----------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------
+
+	void
+	getPhysicalDeviceSurfaceFormats( 
+		VkPhysicalDevice& p_device,
+		std::vector<VkSurfaceFormatKHR>& p_surfaceFormats,
+		VkSurfaceKHR& p_surface
+	) noexcept
+	{
+		uint32_t formatsCount { 0 };
+
+		vkGetPhysicalDeviceSurfaceFormatsKHR( p_device, p_surface, &formatsCount, nullptr );
+
+		p_surfaceFormats.resize(formatsCount);
+
+		vkGetPhysicalDeviceSurfaceFormatsKHR( p_device, p_surface, &formatsCount, p_surfaceFormats.data() );
+	}
+
+	//-----------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------
+
+	void
+	getPhysicalDevicePresentModes(
+		VkPhysicalDevice& p_device,
+		std::vector<VkPresentModeKHR>& p_presentModes,
+		VkSurfaceKHR& p_surface
+	) noexcept
+	{
+		uint32_t modesCount { 0 };
+
+		vkGetPhysicalDeviceSurfacePresentModesKHR( p_device, p_surface, &modesCount, nullptr );
+
+		p_presentModes.resize(modesCount);
+
+		vkGetPhysicalDeviceSurfacePresentModesKHR( p_device, p_surface, &modesCount, p_presentModes.data() );
+	}
+
 }

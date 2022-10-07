@@ -12,6 +12,7 @@ namespace Graphics::Manager
 		initCreationInfo();
 		createDevice();
 		getQueueHandler();
+		//TODO : Hacer la creación de la swapchain
 	}
 
 	//-------------------------------------------------------------------------
@@ -21,7 +22,7 @@ namespace Graphics::Manager
 	{
 		VkResult result = vkDeviceWaitIdle( _device );
 
-		ASSERT( result == VK_SUCCESS, "Error waitid DEvices for destruction" )
+		ASSERT( result == VK_SUCCESS, "Error waitid Devices for destruction" )
 
 		vkDestroySurfaceKHR(
 			_engineInstance.getInstance(),
@@ -45,7 +46,85 @@ namespace Graphics::Manager
 
 		getPhysicalDevices( _engineInstance.getInstance(), devices );
 
-		pickBestPhysicalDevice( devices, _phDevice);
+		for( auto& phDevice : devices )
+		{
+			if (getSuitableDevice( phDevice ))
+			{
+				_phDevice = phDevice;
+				break;
+			}
+		}
+	}
+
+	//-------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
+	
+	bool Device::getSuitableDevice( VkPhysicalDevice& p_device ) noexcept
+	{
+		//TODO : Ahora mismo tengo unas features puestas a piñon, cuando haga falta cambiarlo estaría puta madre la vdd
+		// checkFeaturesSuitability( p_device );
+
+		auto queueCheck = checkQueuesSuitability( p_device );
+		if( !queueCheck )
+			return false;
+		
+		auto extensionCheck = checkExtensionsSuitability( p_device );
+		if( !extensionCheck )
+			return false;
+
+		auto swapchainCheck = checkSwapchainSuitability( p_device );
+		if( !swapchainCheck )
+			return false;
+		
+		return true;
+	}
+	
+	//-------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
+
+	bool Device::checkSwapchainSuitability( VkPhysicalDevice& p_device ) noexcept
+	{
+		SwapchainSupportInfo swapInfo;
+
+		vkGetPhysicalDeviceSurfaceCapabilitiesKHR( p_device, _surface, &swapInfo._surfaceCapabilities);
+		getPhysicalDeviceSurfaceFormats( p_device, swapInfo._formats, _surface);
+		getPhysicalDevicePresentModes( p_device, swapInfo._presentModes, _surface);
+
+		auto availableFormats = !swapInfo._formats.empty();
+		auto availablePresentModes = !swapInfo._presentModes.empty();
+
+		return availableFormats && availablePresentModes;
+	}
+
+	//-------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
+
+	bool Device::checkExtensionsSuitability( VkPhysicalDevice& p_device ) noexcept
+	{
+		std::vector<VkExtensionProperties> extProp {};
+		getPhysicalDeviceAvailableExtensions( p_device , extProp );
+
+		std::set<std::string> requiredExt ( _requiredDeviceExt.begin(), _requiredDeviceExt.end() );
+
+		for(auto& extension : extProp)
+		{
+			requiredExt.erase( extension.extensionName );
+		}
+
+		return requiredExt.empty();
+	}
+
+	//-------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
+
+	bool Device::checkQueuesSuitability( VkPhysicalDevice& p_device ) noexcept
+	{
+		std::vector<VkQueueFamilyProperties> queueProp {};
+		getPhysicalDeviceQueueProperties( p_device , queueProp );
+
+		_queueIndexInfo.pickBestPhysicalDeviceQueues(queueProp, _surface, p_device);
+
+		return _queueIndexInfo.isComplete();
 	}
 
 	//-------------------------------------------------------------------------
@@ -70,12 +149,6 @@ namespace Graphics::Manager
 
 	void Device::initQueueCreateInfo() noexcept
 	{
-		//TODO : Esto se puede conceptualizar seguro
-		std::vector<VkQueueFamilyProperties> queueProp {};
-		getPhysicalDeviceQueueProperties( _phDevice , queueProp );
-
-		_queueIndexInfo.pickBestPhysicalDeviceQueues(queueProp, _surface, _phDevice);
-
 		std::set<uint32_t> queueIndex {};
 		_queueIndexInfo.getSetIndex(queueIndex);
 
@@ -104,15 +177,16 @@ namespace Graphics::Manager
 		_deviceInfo.sType = {VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO};
 		_deviceInfo.pNext = {nullptr};
 		_deviceInfo.flags = {0};
-		_deviceInfo.enabledExtensionCount = {0};
-		_deviceInfo.ppEnabledExtensionNames = {nullptr};
+
+		_deviceInfo.enabledExtensionCount = { (uint32_t) _requiredDeviceExt.size() };
+		_deviceInfo.ppEnabledExtensionNames = { _requiredDeviceExt.data() };
 		
 		_deviceInfo.queueCreateInfoCount = {(uint32_t)_queueInfo.size()};
 		_deviceInfo.pQueueCreateInfos = {_queueInfo.data()};
 
 		_deviceInfo.pEnabledFeatures = {&_deviceFeature};
 		_deviceInfo.enabledLayerCount = instanceInfo.enabledLayerCount;
-		_deviceInfo.ppEnabledLayerNames = instanceInfo.ppEnabledLayerNames;
+		_deviceInfo.ppEnabledLayerNames = instanceInfo.ppEnabledLayerNames;	
 	}
 
 	//-------------------------------------------------------------------------
@@ -136,7 +210,8 @@ namespace Graphics::Manager
 
 	void Device::getQueueHandler() noexcept
 	{
-		vkGetDeviceQueue( _device, _queueIndexInfo._graphicsFamilyQueueIndex.value(), 0, &_queueHandler);
+		vkGetDeviceQueue( _device, _queueIndexInfo._graphicsFamilyQueueIndex.value(), 0, &_graphicsQueueHandler);
+		// vkGetDeviceQueue( _device, _queueIndexInfo._presentFamilyQueueIndex.value(), 0, &_presentQueueHandler);
 	}
 
 	//-------------------------------------------------------------------------

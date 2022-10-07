@@ -21,6 +21,9 @@ namespace Graphics::Manager
 	) noexcept
 	{
 		int i { 0 };
+
+		clean();
+		
 		for(auto& prop : p_queueProp )
 		{
 			checkGraphicQueueIndex(	prop, i );
@@ -84,5 +87,14 @@ namespace Graphics::Manager
 			_presentFamilyQueueIndex = p_queueId;
 	}
 
+	//-------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
+
+	void
+	QueueFamilyInfo::clean() noexcept
+	{
+		_graphicsFamilyQueueIndex.reset();
+		_presentFamilyQueueIndex.reset();
+	}
 
 }

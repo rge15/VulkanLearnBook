@@ -37,5 +37,7 @@ namespace Graphics::Manager
 			const VkPhysicalDevice& p_device
 		) noexcept;
 
+		void clean() noexcept;
+
 	};
 }
