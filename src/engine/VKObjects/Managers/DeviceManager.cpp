@@ -7,7 +7,7 @@ namespace Graphics::Manager
 	{
 		getSurfaceDisplay();
 		getPhysicalDevice();
-		initQueueCreateInfo();
+		_queueManager.initQueueCreateInfo();
 		initFeatureRequeriments();
 		initCreationInfo();
 		createDevice();
@@ -64,7 +64,7 @@ namespace Graphics::Manager
 		//TODO : Ahora mismo tengo unas features puestas a piñon, cuando haga falta cambiarlo estaría puta madre la vdd
 		// checkFeaturesSuitability( p_device );
 
-		auto queueCheck = checkQueuesSuitability( p_device );
+		auto queueCheck = _queueManager.checkQueuesSuitability(p_device, _surface);
 		if( !queueCheck )
 			return false;
 		
@@ -117,19 +117,6 @@ namespace Graphics::Manager
 	//-------------------------------------------------------------------------
 	//-------------------------------------------------------------------------
 
-	bool Device::checkQueuesSuitability( VkPhysicalDevice& p_device ) noexcept
-	{
-		std::vector<VkQueueFamilyProperties> queueProp {};
-		getPhysicalDeviceQueueProperties( p_device , queueProp );
-
-		_queueIndexInfo.pickBestPhysicalDeviceQueues(queueProp, _surface, p_device);
-
-		return _queueIndexInfo.isComplete();
-	}
-
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-
 	void Device::initFeatureRequeriments() noexcept
 	{
 		VkPhysicalDeviceFeatures deviceFeatures{};
@@ -147,29 +134,6 @@ namespace Graphics::Manager
 	//-------------------------------------------------------------------------
 	//-------------------------------------------------------------------------
 
-	void Device::initQueueCreateInfo() noexcept
-	{
-		std::set<uint32_t> queueIndex {};
-		_queueIndexInfo.getSetIndex(queueIndex);
-
-		_queueInfo.resize( queueIndex.size() );
-
-		int i = 0;
-		for(auto queueID : queueIndex)
-		{
-			_queueInfo[i].sType = {VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO};
-			_queueInfo[i].pNext = {nullptr};
-			_queueInfo[i].queueCount = {1};
-			_queueInfo[i].flags = {0};
-			_queueInfo[i].pQueuePriorities = &_queueIndexInfo._priorityValue;
-			_queueInfo[i].queueFamilyIndex = queueID;
-			++i;
-		}
-	}
-
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-
 	void Device::initCreationInfo() noexcept
 	{
 		auto& instanceInfo = _engineInstance.getInstanceInfo();
@@ -181,8 +145,8 @@ namespace Graphics::Manager
 		_deviceInfo.enabledExtensionCount = { (uint32_t) _requiredDeviceExt.size() };
 		_deviceInfo.ppEnabledExtensionNames = { _requiredDeviceExt.data() };
 		
-		_deviceInfo.queueCreateInfoCount = {(uint32_t)_queueInfo.size()};
-		_deviceInfo.pQueueCreateInfos = {_queueInfo.data()};
+		_deviceInfo.queueCreateInfoCount = {(uint32_t)_queueManager.queueCount()};
+		_deviceInfo.pQueueCreateInfos = {_queueManager.queueData()};
 
 		_deviceInfo.pEnabledFeatures = {&_deviceFeature};
 		_deviceInfo.enabledLayerCount = instanceInfo.enabledLayerCount;
@@ -210,8 +174,8 @@ namespace Graphics::Manager
 
 	void Device::getQueueHandler() noexcept
 	{
-		vkGetDeviceQueue( _device, _queueIndexInfo._graphicsFamilyQueueIndex.value(), 0, &_graphicsQueueHandler);
-		// vkGetDeviceQueue( _device, _queueIndexInfo._presentFamilyQueueIndex.value(), 0, &_presentQueueHandler);
+		_queueManager.getGraphicHandler( _device, _graphicsQueueHandler);
+		_queueManager.getPresentHandler( _device, _presentQueueHandler);
 	}
 
 	//-------------------------------------------------------------------------
