@@ -56,4 +56,45 @@ namespace Graphics::Manager
 		vkGetDeviceQueue( p_device, _queueIndexInfo._presentFamilyQueueIndex.value(), 0, &p_queueHandler);
 	}
 
+	//-------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
+
+	void
+	QueueManager::updateQueueIdData() noexcept
+	{
+		_queueIndexInfo._queuesIds.clear();
+		_queueIndexInfo._queuesIds.shrink_to_fit();
+
+		_queueIndexInfo._queuesIds.push_back( _queueIndexInfo._presentFamilyQueueIndex.value() );
+		_queueIndexInfo._queuesIds.push_back( _queueIndexInfo._graphicsFamilyQueueIndex.value() );
+	}
+
+	//-------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
+
+	int
+	QueueManager::getGraphicQueueId() const noexcept
+	{ 
+		if( _queueIndexInfo._graphicsFamilyQueueIndex.has_value() )
+		{
+			return _queueIndexInfo._graphicsFamilyQueueIndex.value();
+		}
+		std::cout << "There isn't graphic queue set yet \n";
+		return -1;
+	}
+
+	//-------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
+
+	int
+	QueueManager::getPresentQueueId() const noexcept
+	{ 
+		if( _queueIndexInfo._presentFamilyQueueIndex.has_value() )
+		{
+			return _queueIndexInfo._presentFamilyQueueIndex.value();
+		}
+		std::cout << "There isn't present queue set yet \n";
+		return -1;
+	}
+
 }

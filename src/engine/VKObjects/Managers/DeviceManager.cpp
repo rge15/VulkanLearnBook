@@ -11,7 +11,8 @@ namespace Graphics::Manager
 		initFeatureRequeriments();
 		initCreationInfo();
 		createDevice();
-		getQueueHandler();
+		updateQueueData();
+		createSwapchain();
 		//TODO : Hacer la creación de la swapchain
 	}
 
@@ -23,6 +24,8 @@ namespace Graphics::Manager
 		VkResult result = vkDeviceWaitIdle( _device );
 
 		ASSERT( result == VK_SUCCESS, "Error waitid Devices for destruction" )
+
+		_swapchain.DestroySwapchain( _device );
 
 		vkDestroySurfaceKHR(
 			_engineInstance.getInstance(),
@@ -72,7 +75,7 @@ namespace Graphics::Manager
 		if( !extensionCheck )
 			return false;
 
-		auto swapchainCheck = checkSwapchainSuitability( p_device );
+		auto swapchainCheck = _swapchain.checkSuitability( p_device, _surface );
 		if( !swapchainCheck )
 			return false;
 		
@@ -82,29 +85,12 @@ namespace Graphics::Manager
 	//-------------------------------------------------------------------------
 	//-------------------------------------------------------------------------
 
-	bool Device::checkSwapchainSuitability( VkPhysicalDevice& p_device ) noexcept
-	{
-		SwapchainSupportInfo swapInfo;
-
-		vkGetPhysicalDeviceSurfaceCapabilitiesKHR( p_device, _surface, &swapInfo._surfaceCapabilities);
-		getPhysicalDeviceSurfaceFormats( p_device, swapInfo._formats, _surface);
-		getPhysicalDevicePresentModes( p_device, swapInfo._presentModes, _surface);
-
-		auto availableFormats = !swapInfo._formats.empty();
-		auto availablePresentModes = !swapInfo._presentModes.empty();
-
-		return availableFormats && availablePresentModes;
-	}
-
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-
 	bool Device::checkExtensionsSuitability( VkPhysicalDevice& p_device ) noexcept
 	{
 		std::vector<VkExtensionProperties> extProp {};
 		getPhysicalDeviceAvailableExtensions( p_device , extProp );
 
-		std::set<std::string> requiredExt ( _requiredDeviceExt.begin(), _requiredDeviceExt.end() );
+		std::set<std::string> requiredExt ( _requiredDeviceExtensions.begin(), _requiredDeviceExtensions.end() );
 
 		for(auto& extension : extProp)
 		{
@@ -142,11 +128,11 @@ namespace Graphics::Manager
 		_deviceInfo.pNext = {nullptr};
 		_deviceInfo.flags = {0};
 
-		_deviceInfo.enabledExtensionCount = { (uint32_t) _requiredDeviceExt.size() };
-		_deviceInfo.ppEnabledExtensionNames = { _requiredDeviceExt.data() };
+		_deviceInfo.enabledExtensionCount = { (uint32_t) _requiredDeviceExtensions.size() };
+		_deviceInfo.ppEnabledExtensionNames = { _requiredDeviceExtensions.data() };
 		
-		_deviceInfo.queueCreateInfoCount = {(uint32_t)_queueManager.queueCount()};
-		_deviceInfo.pQueueCreateInfos = {_queueManager.queueData()};
+		_deviceInfo.queueCreateInfoCount = {(uint32_t)_queueManager.getQueueCount()};
+		_deviceInfo.pQueueCreateInfos = { _queueManager.getQueueData()};
 
 		_deviceInfo.pEnabledFeatures = {&_deviceFeature};
 		_deviceInfo.enabledLayerCount = instanceInfo.enabledLayerCount;
@@ -172,10 +158,11 @@ namespace Graphics::Manager
 	//-------------------------------------------------------------------------
 	//-------------------------------------------------------------------------
 
-	void Device::getQueueHandler() noexcept
+	void Device::updateQueueData() noexcept
 	{
 		_queueManager.getGraphicHandler( _device, _graphicsQueueHandler);
 		_queueManager.getPresentHandler( _device, _presentQueueHandler);
+		_queueManager.updateQueueIdData();
 	}
 
 	//-------------------------------------------------------------------------
@@ -192,4 +179,15 @@ namespace Graphics::Manager
 
 		ASSERT(result == VK_FALSE, " Error creating the surface for display ")
 	}
+
+	//-------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
+
+	void Device::createSwapchain() noexcept
+	{
+		_swapchain.settingUpSwapchain( _window );
+		_swapchain.createSwapchain( _device, _surface, _queueManager );
+	}
+
+
 }

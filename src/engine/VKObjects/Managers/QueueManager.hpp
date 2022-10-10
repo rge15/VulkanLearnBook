@@ -24,16 +24,29 @@ namespace Graphics::Manager
 			initQueueCreateInfo() noexcept;
 
 			int32_t
-			queueCount() noexcept { return _queueInfo.size(); }
+			getQueueCount() noexcept { return _queueInfo.size(); }
 
 			VkDeviceQueueCreateInfo*
-			queueData() noexcept { return _queueInfo.data(); }
+			getQueueData() noexcept { return _queueInfo.data(); }
+
+			QueueFamilyInfo&
+			getQueueFamilyInfo() noexcept { return _queueIndexInfo; }
 
 			void
 			getGraphicHandler( VkDevice& p_device, VkQueue& p_queueHandler) const noexcept;
 
 			void
 			getPresentHandler( VkDevice& p_device, VkQueue& p_queueHandler) const noexcept;
+
+			void
+			updateQueueIdData() noexcept;
+
+			int
+			getGraphicQueueId() const noexcept;
+
+			int
+			getPresentQueueId() const noexcept;
+
 
 	};
 }

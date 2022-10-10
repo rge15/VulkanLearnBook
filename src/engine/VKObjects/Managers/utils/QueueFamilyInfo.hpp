@@ -6,8 +6,10 @@
 namespace Graphics::Manager
 {
 	struct QueueFamilyInfo{
+		//TODO : Lo de las colas es super poco escalable, es un coñazo la vdd
 		std::optional<uint32_t> _graphicsFamilyQueueIndex;
 		std::optional<uint32_t> _presentFamilyQueueIndex;
+		std::vector<uint32_t> _queuesIds {};
 		float _priorityValue { 1.f };
 
 		bool isComplete() const noexcept;

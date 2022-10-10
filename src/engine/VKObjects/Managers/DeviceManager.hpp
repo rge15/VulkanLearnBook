@@ -2,10 +2,10 @@
 #include <utilities/TypeAliases.hpp>
 #include <utilities/assertMacros.hpp>
 #include "../Helpers/GetVKObjects.hpp"
-#include "utils/SwapchainSupportInfo.hpp"
 #include "InstanceManager.hpp"
 #include <vulkan/vulkan.h>
 #include "QueueManager.hpp"
+#include "SwapchainManager.hpp"
 
 namespace Graphics::Manager
 {
@@ -23,22 +23,19 @@ namespace Graphics::Manager
 			VkDeviceCreateInfo 						_deviceInfo 	{};
 			VkPhysicalDeviceFeatures 				_deviceFeature 	{};
 
-			const std::vector<const char*> _requiredDeviceExt = {
+			const std::vector<const char*> _requiredDeviceExtensions = {
     			VK_KHR_SWAPCHAIN_EXTENSION_NAME
 			};
 
 			//?Entiendo que el manejador de la SURFACE tendrá que ir en una clase aparte para hacer paridas de colas
 			VkSurfaceKHR _surface {};
 
-			QueueManager _queueManager {};
-			//?Entiendo que el manejador de la QUEUE tendrá que ir en una clase aparte para hacer paridas de colas
-			// std::vector<VkDeviceQueueCreateInfo>	_queueInfo	{};
-			// QueueFamilyInfo _queueIndexInfo	{};
+			QueueManager 	_queueManager			{};
 			VkQueue			_presentQueueHandler	{};
 			VkQueue			_graphicsQueueHandler	{};
 
 			//TODO : Hacer clase swapchain handler que maneje toda la parida de swapchain y quitar el máximo número de cosas de aquí
-			// VkSwapchainKHR _swapchain {};
+			SwapchainManager _swapchain {};
 
 
 		public:
@@ -57,8 +54,6 @@ namespace Graphics::Manager
 
 			bool checkExtensionsSuitability( VkPhysicalDevice& p_device ) noexcept;
 
-			bool checkSwapchainSuitability( VkPhysicalDevice& p_device ) noexcept;
-
 			void initFeatureRequeriments() noexcept;
 
 			void initQueueCreateInfo() noexcept;
@@ -67,8 +62,10 @@ namespace Graphics::Manager
 
 			void createDevice() noexcept;
 
-			void getQueueHandler() noexcept;
+			void updateQueueData() noexcept;
 			
 			void getSurfaceDisplay() noexcept;
+
+			void createSwapchain() noexcept;
 	};
 }

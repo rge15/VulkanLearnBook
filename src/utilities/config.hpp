@@ -8,4 +8,6 @@
 #include <cstring>
 #include <optional>
 #include <set>
-#include <unordered_map>
+#include <cstdint>
+#include <limits>
+#include <algorithm>
