@@ -12,12 +12,16 @@ namespace Graphics::Manager
 			VkSwapchainKHR _swapchain { VK_NULL_HANDLE };
 			SwapchainInfo _swapchainInfo {};
 			VkSwapchainCreateInfoKHR _swapchainCreateInfo {};			
+			std::vector<VkImage> _swapchainImages {};
 
 			void
 			fillSwapchainCreateInfo( VkSurfaceKHR& p_surface, QueueManager& p_queues ) noexcept;
 
 			void
 			fillQueueDataCreateInfo( QueueManager& p_queues ) noexcept;
+
+			void
+			getSwapchainImages( VkDevice& p_device ) noexcept;
 
 		public:
 			SwapchainManager() noexcept = default;

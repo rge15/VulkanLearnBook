@@ -85,6 +85,7 @@ namespace Graphics::Manager
 
 		std::cout << "[INFO] Nice created la swapchain crack \n";
 
+		getSwapchainImages( p_device );
 	}
 
 	//-------------------------------------------------------------------------
@@ -95,5 +96,22 @@ namespace Graphics::Manager
 	{
 		vkDestroySwapchainKHR( p_device, _swapchain, nullptr);
 	}
+
+	//-------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
+
+	void
+	SwapchainManager::getSwapchainImages( VkDevice& p_device ) noexcept
+	{
+		uint32_t imageCount {0};
+
+		vkGetSwapchainImagesKHR( p_device, _swapchain, &imageCount, nullptr);
+
+		_swapchainImages.resize(imageCount);
+
+		vkGetSwapchainImagesKHR( p_device, _swapchain, &imageCount, _swapchainImages.data());
+
+		std::cout << "[INFO] Getting "<< imageCount << " images from the swapchain \n";
+	}	
 
 }
