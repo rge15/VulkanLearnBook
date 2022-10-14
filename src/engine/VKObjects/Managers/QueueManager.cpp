@@ -44,7 +44,7 @@ namespace Graphics::Manager
 	void
 	QueueManager::getGraphicHandler( VkDevice& p_device, VkQueue& p_queueHandler) const noexcept
 	{
-		vkGetDeviceQueue( p_device, _queueIndexInfo._graphicsFamilyQueueIndex.value(), 0, &p_queueHandler);
+		vkGetDeviceQueue( p_device, _queueIndexInfo._graphicsFamilyQueueIndex.getValue(), 0, &p_queueHandler);
 	}
 
 	//-------------------------------------------------------------------------
@@ -53,7 +53,7 @@ namespace Graphics::Manager
 	void
 	QueueManager::getPresentHandler( VkDevice& p_device, VkQueue& p_queueHandler) const noexcept
 	{
-		vkGetDeviceQueue( p_device, _queueIndexInfo._presentFamilyQueueIndex.value(), 0, &p_queueHandler);
+		vkGetDeviceQueue( p_device, _queueIndexInfo._presentFamilyQueueIndex.getValue(), 0, &p_queueHandler);
 	}
 
 	//-------------------------------------------------------------------------
@@ -65,8 +65,8 @@ namespace Graphics::Manager
 		_queueIndexInfo._queuesIds.clear();
 		_queueIndexInfo._queuesIds.shrink_to_fit();
 
-		_queueIndexInfo._queuesIds.push_back( _queueIndexInfo._presentFamilyQueueIndex.value() );
-		_queueIndexInfo._queuesIds.push_back( _queueIndexInfo._graphicsFamilyQueueIndex.value() );
+		_queueIndexInfo._queuesIds.push_back( _queueIndexInfo._presentFamilyQueueIndex.getValue() );
+		_queueIndexInfo._queuesIds.push_back( _queueIndexInfo._graphicsFamilyQueueIndex.getValue() );
 	}
 
 	//-------------------------------------------------------------------------
@@ -75,9 +75,9 @@ namespace Graphics::Manager
 	int
 	QueueManager::getGraphicQueueId() const noexcept
 	{ 
-		if( _queueIndexInfo._graphicsFamilyQueueIndex.has_value() )
+		if( _queueIndexInfo._graphicsFamilyQueueIndex.hasValue() )
 		{
-			return _queueIndexInfo._graphicsFamilyQueueIndex.value();
+			return _queueIndexInfo._graphicsFamilyQueueIndex.getValue();
 		}
 		std::cout << "There isn't graphic queue set yet \n";
 		return -1;
@@ -89,9 +89,9 @@ namespace Graphics::Manager
 	int
 	QueueManager::getPresentQueueId() const noexcept
 	{ 
-		if( _queueIndexInfo._presentFamilyQueueIndex.has_value() )
+		if( _queueIndexInfo._presentFamilyQueueIndex.hasValue() )
 		{
-			return _queueIndexInfo._presentFamilyQueueIndex.value();
+			return _queueIndexInfo._presentFamilyQueueIndex.getValue();
 		}
 		std::cout << "There isn't present queue set yet \n";
 		return -1;

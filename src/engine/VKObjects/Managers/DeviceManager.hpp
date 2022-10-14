@@ -16,33 +16,31 @@ namespace Graphics::Manager
 			Instance& _engineInstance;
 			GLFWwindow& _window;
 
+			VkPhysicalDevice _phDevice { VK_NULL_HANDLE };
 			VkDevice _device { VK_NULL_HANDLE };
 
-			VkPhysicalDevice _phDevice { VK_NULL_HANDLE };
-
-			VkDeviceCreateInfo 						_deviceInfo 	{};
-			VkPhysicalDeviceFeatures 				_deviceFeature 	{};
+			VkDeviceCreateInfo 			_deviceInfo 	{};
+			VkPhysicalDeviceFeatures 	_deviceFeature 	{};
 
 			const std::vector<const char*> _requiredDeviceExtensions = {
     			VK_KHR_SWAPCHAIN_EXTENSION_NAME
 			};
 
-			//?Entiendo que el manejador de la SURFACE tendrá que ir en una clase aparte para hacer paridas de colas
 			VkSurfaceKHR _surface {};
 
 			QueueManager 	_queueManager			{};
 			VkQueue			_presentQueueHandler	{};
 			VkQueue			_graphicsQueueHandler	{};
 
-			//TODO : Hacer clase swapchain handler que maneje toda la parida de swapchain y quitar el máximo número de cosas de aquí
 			SwapchainManager _swapchain {};
-
 
 		public:
 
 			Device( Instance& p_vkInstance, GLFWwindow& p_window )	noexcept;
 
 			~Device() noexcept;
+
+			//? Ir haciendo los getters en ir haciendo falta
 
 		private:
 

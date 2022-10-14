@@ -13,7 +13,6 @@ namespace Graphics::Manager
 		createDevice();
 		updateQueueData();
 		createSwapchain();
-		//TODO : Hacer la creación de la swapchain
 	}
 
 	//-------------------------------------------------------------------------
@@ -64,9 +63,6 @@ namespace Graphics::Manager
 	
 	bool Device::getSuitableDevice( VkPhysicalDevice& p_device ) noexcept
 	{
-		//TODO : Ahora mismo tengo unas features puestas a piñon, cuando haga falta cambiarlo estaría puta madre la vdd
-		// checkFeaturesSuitability( p_device );
-
 		auto queueCheck = _queueManager.checkQueuesSuitability(p_device, _surface);
 		if( !queueCheck )
 			return false;
@@ -113,8 +109,8 @@ namespace Graphics::Manager
 		);
 
 		_deviceFeature.multiDrawIndirect = deviceFeatures.multiDrawIndirect;
-		_deviceFeature.geometryShader = VK_TRUE;
-		_deviceFeature.tessellationShader = VK_TRUE;
+		_deviceFeature.geometryShader = deviceFeatures.geometryShader;
+		_deviceFeature.tessellationShader = deviceFeatures.tessellationShader;
 	}
 
 	//-------------------------------------------------------------------------
@@ -188,6 +184,5 @@ namespace Graphics::Manager
 		_swapchain.settingUpSwapchain( _window );
 		_swapchain.createSwapchain( _device, _surface, _queueManager );
 	}
-
 
 }

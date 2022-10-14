@@ -32,6 +32,10 @@ ifeq ($(config),debug)
 else ifeq ($(config),release)
 	DEFINES += -DRELEASE
 	CCFLAGS += -O3
+else ifeq ($(config),memcheck)
+	DEFINES += -DDEBUG
+	CCFLAGS += -g -fsanitize=address
+	LIBS	+= -fsanitize=address
 else
 	$(error "Invalid config type $(config). Set config to debug or realease")
 endif

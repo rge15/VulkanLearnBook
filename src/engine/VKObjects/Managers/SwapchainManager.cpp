@@ -85,7 +85,9 @@ namespace Graphics::Manager
 
 		std::cout << "[INFO] Nice created la swapchain crack \n";
 
-		getSwapchainImages( p_device );
+		getImages( p_device );
+
+		getImageViews( p_device );
 	}
 
 	//-------------------------------------------------------------------------
@@ -94,6 +96,9 @@ namespace Graphics::Manager
 	void
 	SwapchainManager::DestroySwapchain( VkDevice& p_device ) noexcept
 	{
+		for(auto& imgView : _swapchainImageViews )
+			vkDestroyImageView( p_device, imgView, nullptr );
+
 		vkDestroySwapchainKHR( p_device, _swapchain, nullptr);
 	}
 
@@ -101,7 +106,7 @@ namespace Graphics::Manager
 	//-------------------------------------------------------------------------
 
 	void
-	SwapchainManager::getSwapchainImages( VkDevice& p_device ) noexcept
+	SwapchainManager::getImages( VkDevice& p_device ) noexcept
 	{
 		uint32_t imageCount {0};
 
@@ -112,6 +117,46 @@ namespace Graphics::Manager
 		vkGetSwapchainImagesKHR( p_device, _swapchain, &imageCount, _swapchainImages.data());
 
 		std::cout << "[INFO] Getting "<< imageCount << " images from the swapchain \n";
-	}	
+	}
+
+	//-------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
+
+	void
+	SwapchainManager::getImageViews( VkDevice& p_device ) noexcept
+	{
+		std::size_t imageNumbers = _swapchainImages.size();
+		VkImageViewCreateInfo _viewInfo {};
+		VkResult result {};
+		std::size_t i { 0 };
+		
+		_swapchainImageViews.resize(imageNumbers);
+
+		_viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+		_viewInfo.format = _swapchainInfo._finalFormat.format;
+		_viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+		_viewInfo.pNext = nullptr;
+		_viewInfo.flags = 0;
+
+		_viewInfo.components.r = VK_COMPONENT_SWIZZLE_R;
+		_viewInfo.components.b = VK_COMPONENT_SWIZZLE_G;
+		_viewInfo.components.g = VK_COMPONENT_SWIZZLE_B;
+		_viewInfo.components.a = VK_COMPONENT_SWIZZLE_A;
+
+		_viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		_viewInfo.subresourceRange.baseArrayLayer = 0;
+		_viewInfo.subresourceRange.baseMipLevel = 0;
+		_viewInfo.subresourceRange.layerCount = 1;
+		_viewInfo.subresourceRange.levelCount = 1;
+
+		for(auto& image : _swapchainImages)
+		{
+			_viewInfo.image = image;
+			vkCreateImageView( p_device, &_viewInfo, nullptr, &_swapchainImageViews[i++] );
+			ASSERT(result == VK_SUCCESS, "Error creating ImageView of swapchain")
+		}
+
+	}
+
 
 }

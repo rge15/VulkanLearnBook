@@ -8,8 +8,8 @@ HelloTriangleApp::~HelloTriangleApp()
 {
 }
 
-void HelloTriangleApp::initEngine() noexcept{
-
+void HelloTriangleApp::initEngine() noexcept
+{
 }
 
 void HelloTriangleApp::mainLoop() noexcept{
