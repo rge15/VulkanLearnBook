@@ -62,11 +62,7 @@ namespace Graphics::Manager
 	void
 	QueueManager::updateQueueIdData() noexcept
 	{
-		_queueIndexInfo._queuesIds.clear();
-		_queueIndexInfo._queuesIds.shrink_to_fit();
-
-		_queueIndexInfo._queuesIds.push_back( _queueIndexInfo._presentFamilyQueueIndex.getValue() );
-		_queueIndexInfo._queuesIds.push_back( _queueIndexInfo._graphicsFamilyQueueIndex.getValue() );
+		_queueIndexInfo.updateQueueData();
 	}
 
 	//-------------------------------------------------------------------------

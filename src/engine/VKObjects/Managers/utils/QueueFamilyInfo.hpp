@@ -46,6 +46,12 @@ namespace Graphics::Manager
 		void
 		getSetIndex(std::set<uint32_t>& p_set) const noexcept;
 
+		/**
+		 * 	@brief Updates the queueFamily info IDs relative data
+		*/
+		void
+		updateQueueData() noexcept;
+
 		private:
 
 		/**
@@ -70,6 +76,7 @@ namespace Graphics::Manager
 		*/
 		void
 		clean() noexcept;
+
 
 	};
 }

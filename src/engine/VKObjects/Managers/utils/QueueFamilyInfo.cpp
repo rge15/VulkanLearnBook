@@ -77,4 +77,19 @@ namespace Graphics::Manager
 		_presentFamilyQueueIndex.reset();
 	}
 
+	//-------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
+
+	void
+	QueueFamilyInfo::updateQueueData() noexcept
+	{
+		_queuesIds.clear();
+		_queuesIds.shrink_to_fit();
+
+		_queuesIds.push_back( _presentFamilyQueueIndex.getValue() );
+		_queuesIds.push_back( _graphicsFamilyQueueIndex.getValue() );
+
+	}
+
+
 }

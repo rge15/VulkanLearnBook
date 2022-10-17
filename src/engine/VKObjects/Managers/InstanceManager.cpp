@@ -16,7 +16,7 @@ namespace Graphics::Manager
 		_appInfo.apiVersion = { VK_MAKE_VERSION(1,0,0) };
 
 		initInstanceData();
-		initInstance();
+		createInstance();
 
 	}
 
@@ -34,7 +34,7 @@ namespace Graphics::Manager
 	//-------------------------------------------------------------------------
 	//-------------------------------------------------------------------------
 
-	void Instance::initInstance() noexcept
+	void Instance::createInstance() noexcept
 	{
 		VkResult result = vkCreateInstance(
 			&_instanceInfo,

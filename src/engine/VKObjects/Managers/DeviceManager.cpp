@@ -158,6 +158,7 @@ namespace Graphics::Manager
 	{
 		_queueManager.getGraphicHandler( _device, _graphicsQueueHandler);
 		_queueManager.getPresentHandler( _device, _presentQueueHandler);
+		//? If you add a Queue Handler, have to update the updateQueueIdData(); 
 		_queueManager.updateQueueIdData();
 	}
 
