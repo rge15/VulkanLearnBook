@@ -39,3 +39,6 @@ obj/
 out/build/
 [Bb][Ui][Ii][Ll][Dd]
 app
+
+# Shaders
+src/Application/shaders/
