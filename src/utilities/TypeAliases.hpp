@@ -6,3 +6,8 @@
 
 
 using string = std::string;
+
+template <typename T>
+using Vector = std::vector<T>;
+
+using JoyID = size_t;

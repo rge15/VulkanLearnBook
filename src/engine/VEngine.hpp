@@ -10,6 +10,7 @@ namespace Graphics
 
 		//UniquPtr for the Driver Manager of the Engine
 		std::unique_ptr<VDriver> _VDriver { nullptr };
+		
 
 	public:
 		
