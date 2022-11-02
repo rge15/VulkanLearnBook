@@ -16,6 +16,12 @@ namespace Graphics::Resource
 	public:
 		BaseResource(/* args */) = default;
 		~BaseResource() = default;
+
+		JoyID
+		getResourceID() const noexcept
+		{
+			return _ID;
+		};
 	};
 
 }
