@@ -4,7 +4,8 @@ namespace Graphics
 {
 
 	VEngine::VEngine( const uint32_t p_w, const uint32_t p_h ) noexcept :
-	_VDriver { std::make_unique<VDriver>(p_w,p_h) }
+	_VDriver { std::make_unique<VDriver>(p_w,p_h) },
+	_VRscManager { std::make_unique<VResourceManager>( _VDriver.get()->getVkDevice() ) }
 	{
 	}
 

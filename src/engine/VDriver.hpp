@@ -61,6 +61,14 @@ namespace Graphics
 		GLFWwindow*
 		getWindow() const noexcept;
 
+		/**
+		 *	@brief Gets the vulkan logical device once created
+		 *
+		 * 	@return Reference to the Vulkan Logical Device
+		*/
+		VkDevice&
+		getVkDevice() const noexcept { return _vkDeviceManager.get()->getVkDevice(); }
+
 	private:
 		
 		/**

@@ -6,11 +6,12 @@
 namespace Graphics::Resource
 {
 
-	class VShader : BaseResource
+	class VShader : public BaseResource
 	{
-		private:
-			using ShaderType = VkShaderStageFlagBits ;
+		public:
+			using ShaderType = VkShaderStageFlagBits;
 
+		private:
 			//Esto alomejor no es const
 			const VkDevice& _ownerDevice;
 			//El modulo del shader
@@ -26,7 +27,7 @@ namespace Graphics::Resource
 
 		public:
 
-			VShader(VkDevice& p_ownerDevice, std::string&& p_shaderPath, ShaderType p_shaderType ) noexcept;
+			VShader(VkDevice& p_ownerDevice, std::string& p_shaderPath, ShaderType p_shaderType ) noexcept;
 
 			~VShader() noexcept;
 

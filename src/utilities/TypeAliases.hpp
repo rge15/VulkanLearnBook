@@ -15,7 +15,7 @@ template <typename T>
 using Vector = std::vector<T>;
 
 template <typename... T>
-using Tuple = std::tuple<T>;
+using Tuple = std::tuple<T...>;
 
 template <typename T, typename V>
 using Map = std::map<T,V>;

@@ -3,7 +3,7 @@
 namespace Graphics::Resource
 {
 
-	VShader::VShader(VkDevice& p_ownerDevice, std::string&& p_shaderPath, ShaderType p_shaderType ) noexcept
+	VShader::VShader(VkDevice& p_ownerDevice, std::string& p_shaderPath, ShaderType p_shaderType ) noexcept
 	: _ownerDevice { p_ownerDevice }, _shaderType { p_shaderType }
 	{
 		readFile( p_shaderPath );
@@ -59,7 +59,7 @@ namespace Graphics::Resource
 	{
 		VkResult shaderCreationResult = vkCreateShaderModule( _ownerDevice, &_info, nullptr, &_shaderModule );
 	
-		ASSERT( (shaderCreationResult == VK_TRUE), "ShaderModule Creation failed ;c")
+		ASSERT( (shaderCreationResult == VK_SUCCESS), "ShaderModule Creation failed ;c")
 	}
 
 //-----------------------------------------------------------------------------

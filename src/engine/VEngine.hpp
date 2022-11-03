@@ -1,16 +1,17 @@
 #include <utilities/config.hpp>
 #include <utilities/assertMacros.hpp>
 #include "VDriver.hpp"
+#include "VResourceManager.hpp"
 
 namespace Graphics
 {
 	class VEngine
 	{
-	private:
+	public:
 
 		//UniquPtr for the Driver Manager of the Engine
 		std::unique_ptr<VDriver> _VDriver { nullptr };
-		
+		std::unique_ptr<VResourceManager> _VRscManager { nullptr };
 
 	public:
 		

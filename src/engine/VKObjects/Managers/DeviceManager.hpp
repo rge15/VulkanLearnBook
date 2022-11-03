@@ -43,6 +43,15 @@ namespace Graphics::Manager
 			~Device() noexcept;
 			//? Ir haciendo los getters en ir haciendo falta
 
+			/**
+			 *	@brief Gets the vulkan logical device once created
+			 *
+			 * 	@return Reference to the Vulkan Logical Device
+			*/
+			VkDevice&
+			getVkDevice() noexcept { return _device; }
+
+
 		private:
 
 			/**
