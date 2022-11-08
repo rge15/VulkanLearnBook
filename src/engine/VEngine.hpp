@@ -1,7 +1,9 @@
 #include <utilities/config.hpp>
 #include <utilities/assertMacros.hpp>
+#include <utilities/TypeAliases.hpp>
 #include "VDriver.hpp"
 #include "VResourceManager.hpp"
+#include "VRenderManager.hpp"
 
 namespace Graphics
 {
@@ -10,8 +12,11 @@ namespace Graphics
 	public:
 
 		//UniquPtr for the Driver Manager of the Engine
-		std::unique_ptr<VDriver> _VDriver { nullptr };
-		std::unique_ptr<VResourceManager> _VRscManager { nullptr };
+		UniqPtr<VDriver> _VDriver { nullptr };
+		//UniquPtr for the Resource Manager of the engine
+		UniqPtr<VResourceManager> _VResourceMngr { nullptr };
+		//UniquPtr for the Render Mananager of the Engine
+		UniqPtr<VRenderManager> _VRenderMngr { nullptr };
 
 	public:
 		

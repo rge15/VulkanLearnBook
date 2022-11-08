@@ -33,8 +33,6 @@ namespace Graphics
 			addGraphicResource( MP::value_type<VShader>, std::string&& p_shaderPath, VShader::ShaderType p_shaderType ) noexcept;
 
 
-			//TODO : Create a VPipeline object that contains a VKRenderPass & VKPipelineLayout  & VKPipeline
-
 		public:
 			VResourceManager( VkDevice& p_deviceOwner ) noexcept;
 			~VResourceManager() noexcept = default;

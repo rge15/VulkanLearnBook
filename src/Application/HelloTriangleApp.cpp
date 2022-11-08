@@ -16,7 +16,7 @@ void HelloTriangleApp::mainLoop() noexcept{
 
 	auto& wind = engine.getWindow();
 
-	engine._VRscManager.get()->loadGraphicResource<VShader>("src/Application/shaders/vert.sprv", VShader::ShaderType::VK_SHADER_STAGE_VERTEX_BIT );
+	engine._VResourceMngr.get()->loadGraphicResource<VShader>("src/Application/shaders/vert.sprv", VShader::ShaderType::VK_SHADER_STAGE_VERTEX_BIT );
 
 	while(!glfwWindowShouldClose(&wind))
 	{
