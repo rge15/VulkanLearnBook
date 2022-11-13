@@ -62,6 +62,14 @@ namespace Graphics
 		getWindow() const noexcept;
 
 		/**
+		 *	@brief Gets the vulkan logical device manager
+		 *
+		 * 	@return Reference to the Vulkan Logical Device Manager
+		*/
+		const Device&
+		getDeviceManager() const noexcept { return *_vkDeviceManager.get(); }
+
+		/**
 		 *	@brief Gets the vulkan logical device once created
 		 *
 		 * 	@return Reference to the Vulkan Logical Device

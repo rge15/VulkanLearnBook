@@ -46,5 +46,8 @@ namespace Graphics::Manager
 			void
 			createSwapchain( VkDevice& p_device, VkSurfaceKHR& p_surface, QueueManager& p_queues ) noexcept;
 
+			const SwapchainInfo&
+			getSwapchainInfo() const noexcept { return _swapchainInfo; }
+
 	};
 }

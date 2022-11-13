@@ -51,6 +51,14 @@ namespace Graphics::Manager
 			VkDevice&
 			getVkDevice() noexcept { return _device; }
 
+			/**
+			 *	@brief Gets the vulkan Swapchain manager
+			 *
+			 * 	@return Reference to the Vulkan Swapchain manager
+			*/
+			const SwapchainManager&
+			getSwapchainManager() const noexcept { return _swapchain; }
+
 
 		private:
 
@@ -114,5 +122,6 @@ namespace Graphics::Manager
 			 *	@brief Create swapchain related to the logical device
 			*/
 			void createSwapchain() noexcept;
+
 	};
 }
