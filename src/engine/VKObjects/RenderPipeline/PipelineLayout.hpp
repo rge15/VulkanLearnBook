@@ -10,7 +10,6 @@ namespace Graphics
 	private:
 		VkDevice& _device;
 	
-		VkPipelineLayout _layout;
 		VkPipelineLayoutCreateInfo _layoutCreateInfo {};
 
 		void
@@ -18,6 +17,8 @@ namespace Graphics
 
 		void
 		createPipelineLayout() noexcept;
+	public:
+		VkPipelineLayout _layout;
 
 	public:
 		PipelineLayout( VkDevice& p_device ) noexcept;

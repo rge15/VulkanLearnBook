@@ -10,13 +10,14 @@ namespace Graphics
 	{
 	private:
 		const Manager::SwapchainInfo& _swapchainInfo;
+		VkDevice& _ownerDevice;
+
 
 		VkRenderPassCreateInfo _createInfo {};
 
 		Vector<VkAttachmentDescription> _attachmentDescriptor {};
-		Vector<VkSubpassDescription> _subpassDescriptor {};
 		Vector<VkAttachmentReference> _attachmentReferences {};
-		Vector<VkSubpassDependency> _subpassDependencies {};
+		Vector<VkSubpassDescription> _subpassDescriptor {};
 
 		void
 		initDistyInfoInANastyWay() noexcept;
@@ -26,9 +27,11 @@ namespace Graphics
 
 		void
 		createRenderPass() noexcept;
+	public:
+		VkRenderPass _renderPass;
 
 	public:
-		RenderPass(const Manager::SwapchainInfo& p_swapInfo) noexcept;
-		~RenderPass() = default;
-	};	
+		RenderPass( VkDevice& p_device ,const Manager::SwapchainInfo& p_swapInfo) noexcept;
+		~RenderPass() noexcept;
+	};
 }
