@@ -60,6 +60,8 @@ namespace Graphics::Resource
 		VkResult shaderCreationResult = vkCreateShaderModule( _ownerDevice, &_info, nullptr, &_shaderModule );
 	
 		ASSERT( (shaderCreationResult == VK_SUCCESS), "ShaderModule Creation failed ;c")
+	
+		initPipelineStageInfo();
 	}
 
 //-----------------------------------------------------------------------------

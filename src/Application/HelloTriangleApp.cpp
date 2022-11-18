@@ -14,11 +14,18 @@ void HelloTriangleApp::initEngine() noexcept
 
 void HelloTriangleApp::mainLoop() noexcept{
 
-	auto& wind = engine.getWindow();
+	auto& window = engine.getWindow();
+	auto& resourceMngr = *engine._VResourceMngr.get();
+	auto& renderMngr = *engine._VRenderMngr.get();
 
-	engine._VResourceMngr.get()->loadGraphicResource<VShader>("src/Application/shaders/vert.sprv", VShader::ShaderType::VK_SHADER_STAGE_VERTEX_BIT );
+	auto [ fShaderID, vertexShader ] = resourceMngr.loadGraphicResource<VShader>("src/Application/shaders/vert.sprv", VShader::ShaderType::VK_SHADER_STAGE_VERTEX_BIT );
+	auto [ vShaderID, fragmentShader ] = resourceMngr.loadGraphicResource<VShader>("src/Application/shaders/frag.sprv", VShader::ShaderType::VK_SHADER_STAGE_FRAGMENT_BIT );
 
-	while(!glfwWindowShouldClose(&wind))
+	renderMngr.addPipelineShaderStages( vertexShader._stageInfo );
+	renderMngr.addPipelineShaderStages( fragmentShader._stageInfo );
+	renderMngr.createRenderPipeline();
+
+	while(!glfwWindowShouldClose(&window))
 	{
 		glfwPollEvents();
 	}

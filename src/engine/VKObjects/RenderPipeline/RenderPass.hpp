@@ -9,9 +9,7 @@ namespace Graphics
 	class RenderPass
 	{
 	private:
-		const Manager::SwapchainInfo& _swapchainInfo;
 		VkDevice& _ownerDevice;
-
 
 		VkRenderPassCreateInfo _createInfo {};
 
@@ -28,6 +26,8 @@ namespace Graphics
 		void
 		createRenderPass() noexcept;
 	public:
+		const Manager::SwapchainInfo& _swapchainInfo;
+
 		VkRenderPass _renderPass;
 
 	public:

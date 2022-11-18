@@ -11,6 +11,9 @@ namespace Graphics::Resource
 		public:
 			using ShaderType = VkShaderStageFlagBits;
 
+			//Shader into pipeline stage info
+			VkPipelineShaderStageCreateInfo _stageInfo;
+
 		private:
 			//Esto alomejor no es const
 			const VkDevice& _ownerDevice;
@@ -22,11 +25,8 @@ namespace Graphics::Resource
 			Vector<char> _code;
 			//Shader Module Info
 			VkShaderModuleCreateInfo _info;
-			//Shader into pipeline stage info
-			VkPipelineShaderStageCreateInfo _stageInfo;
 
 		public:
-
 			VShader(VkDevice& p_ownerDevice, std::string& p_shaderPath, ShaderType p_shaderType ) noexcept;
 
 			~VShader() noexcept;

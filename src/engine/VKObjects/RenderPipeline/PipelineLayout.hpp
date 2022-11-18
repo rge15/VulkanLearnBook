@@ -11,7 +11,7 @@ namespace Graphics
 		VkDevice& _device;
 	
 		VkPipelineLayoutCreateInfo _layoutCreateInfo {};
-
+	
 		void
 		initPipelineLayoutData() noexcept;
 
