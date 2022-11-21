@@ -23,7 +23,7 @@ void HelloTriangleApp::mainLoop() noexcept{
 
 	renderMngr.addPipelineShaderStages( vertexShader._stageInfo );
 	renderMngr.addPipelineShaderStages( fragmentShader._stageInfo );
-	renderMngr.createRenderPipeline();
+	renderMngr.setUpRenderPipeline();
 
 	while(!glfwWindowShouldClose(&window))
 	{

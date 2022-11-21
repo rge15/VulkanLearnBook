@@ -1,5 +1,5 @@
 #pragma once
-#include <utilities/config.hpp>
+#include <utilities/TypeAliases.hpp>
 #include <vulkan/vulkan.h>
 #include "utils/SwapchainInfo.hpp"
 #include "QueueManager.hpp"
@@ -12,8 +12,8 @@ namespace Graphics::Manager
 			VkSwapchainKHR _swapchain { VK_NULL_HANDLE };
 			SwapchainInfo _swapchainInfo {};
 			VkSwapchainCreateInfoKHR _swapchainCreateInfo {};			
-			std::vector<VkImage> _swapchainImages {};
-			std::vector<VkImageView> _swapchainImageViews {};
+			Vector<VkImage> _swapchainImages {};
+			Vector<VkImageView> _swapchainImageViews {};
 
 			void
 			fillSwapchainCreateInfo( VkSurfaceKHR& p_surface, QueueManager& p_queues ) noexcept;
@@ -48,6 +48,9 @@ namespace Graphics::Manager
 
 			const SwapchainInfo&
 			getSwapchainInfo() const noexcept { return _swapchainInfo; }
+
+			const Vector<VkImageView>&
+			getImageViews() const noexcept { return _swapchainImageViews; };
 
 	};
 }

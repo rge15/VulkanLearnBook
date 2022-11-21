@@ -139,8 +139,8 @@ namespace Graphics::Manager
 		_viewInfo.flags = 0;
 
 		_viewInfo.components.r = VK_COMPONENT_SWIZZLE_R;
-		_viewInfo.components.b = VK_COMPONENT_SWIZZLE_G;
-		_viewInfo.components.g = VK_COMPONENT_SWIZZLE_B;
+		_viewInfo.components.b = VK_COMPONENT_SWIZZLE_B;
+		_viewInfo.components.g = VK_COMPONENT_SWIZZLE_G;
 		_viewInfo.components.a = VK_COMPONENT_SWIZZLE_A;
 
 		_viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;

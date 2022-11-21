@@ -4,7 +4,7 @@
 #include <engine/VKObjects/RenderPipeline/PipelineLayout.hpp>
 #include <engine/VKObjects/RenderPipeline/RenderPass.hpp>
 #include <engine/VKObjects/RenderPipeline/RenderPipeline.hpp>
-#include <engine/VKObjects/Managers/utils/SwapchainInfo.hpp>
+#include <engine/VKObjects/Managers/SwapchainManager.hpp>
 #include <engine/VKObjects/Resources/VShader.hpp> 
 
 namespace Graphics
@@ -22,17 +22,31 @@ namespace Graphics
 
 		Vector<VkPipelineShaderStageCreateInfo> _pipelineShaders {};
 
+		Vector<VkFramebuffer> _swapchainFramebuffers {};
+
+		VkDevice& _ownerDevice;
+		const Manager::SwapchainManager& _swapManager;
+
 	public:
 
-		VRenderManager( VkDevice& p_device, const Manager::SwapchainInfo& p_swapchainInfo ) noexcept;
+		VRenderManager( VkDevice& p_device, const Manager::SwapchainManager& p_swapchainInfo ) noexcept;
 
-		~VRenderManager() = default;
+		~VRenderManager();
 
 		void
 		addPipelineShaderStages( VkPipelineShaderStageCreateInfo& p_shader ) noexcept;
 
 		void
+		setUpRenderPipeline() noexcept;
+
+	private:
+	
+		void
 		createRenderPipeline() noexcept;
+
+		void
+		createFrameBuffers() noexcept;
+
 	};
 
 }
