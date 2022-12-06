@@ -4,17 +4,15 @@ namespace Graphics
 {
 
 	VRenderManager::VRenderManager( 
-		VkDevice& p_device, const Manager::SwapchainManager& p_swapManager
+		VkDevice& p_device,
+		const Manager::SwapchainManager& p_swapManager,
+		const Manager::QueueManager& p_queueManager
 	) noexcept
 	: _swapManager { p_swapManager }
 	, _ownerDevice { p_device }
+	, _queueManager { p_queueManager }
 	, _pipelineLayout { std::make_unique<PipelineLayout>( p_device ) }
 	, _renderPass { std::make_unique<RenderPass>( p_device, p_swapManager.getSwapchainInfo() ) }
-	, _renderPipeline { 
-		std::make_unique<RenderPipeline>( p_device,
-										  _pipelineLayout.get()->_layout, 
-										  _renderPass.get()->_renderPass,
-										  p_swapManager.getSwapchainInfo() ) }
 	{
 	}
 
@@ -44,6 +42,12 @@ namespace Graphics
 	void
 	VRenderManager::createRenderPipeline() noexcept
 	{
+		_renderPipeline = std::make_unique<RenderPipeline>( 
+			_ownerDevice,
+			_pipelineLayout.get()->_layout, 
+			_renderPass.get()->_renderPass,
+			_swapManager.getSwapchainInfo() );
+
 		_renderPipeline.get()->setShaderStages( _pipelineShaders );
 		_renderPipeline.get()->createPipeline();
 	}
@@ -54,8 +58,12 @@ namespace Graphics
 	void
 	VRenderManager::setUpRenderPipeline() noexcept
 	{
-		createRenderPipeline();
-		createFrameBuffers();
+		if( _renderPipeline == nullptr )
+		{
+			createRenderPipeline();
+			createFrameBuffers();
+		}else
+			std::cout << "Render Pipeline already setted (;vD)" << '\n';
 	}
 
 //-----------------------------------------------------------------------------
@@ -94,5 +102,25 @@ namespace Graphics
 		}
 
 	}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+	void
+	VRenderManager::prepareRenderPipelineDrawing() noexcept
+	{
+		if(_renderPipeline.get() == nullptr)
+		{
+			std::cout << "Render Pipeline isn't created (:vC), call setUpRenderPipeline() before setting your shaderStages." << '\n';
+			return;
+		}
+
+		if(_renderDrawer.get() == nullptr)
+			_renderDrawer = std::make_unique<RenderDrawer>(_ownerDevice, _swapManager, _queueManager, *_renderPipeline.get(), _swapchainFramebuffers);
+		else
+			std::cout << "Render Drawer already setted (;vD)" << '\n';
+
+	}
+
 
 }

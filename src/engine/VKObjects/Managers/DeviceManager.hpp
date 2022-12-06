@@ -59,6 +59,9 @@ namespace Graphics::Manager
 			const SwapchainManager&
 			getSwapchainManager() const noexcept { return _swapchain; }
 
+			const QueueManager&
+			getQueueManager() const noexcept { return _queueManager; }
+			
 
 		private:
 

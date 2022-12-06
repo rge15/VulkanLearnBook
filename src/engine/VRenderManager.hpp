@@ -4,15 +4,21 @@
 #include <engine/VKObjects/RenderPipeline/PipelineLayout.hpp>
 #include <engine/VKObjects/RenderPipeline/RenderPass.hpp>
 #include <engine/VKObjects/RenderPipeline/RenderPipeline.hpp>
-#include <engine/VKObjects/Managers/SwapchainManager.hpp>
 #include <engine/VKObjects/Resources/VShader.hpp> 
+#include <engine/VKObjects/RenderPipeline/RenderDrawer.hpp>
+
 
 namespace Graphics
 {
 	class VRenderManager
 	{
 	private:
-
+		VkDevice& _ownerDevice;
+		const Manager::SwapchainManager& _swapManager;
+		const Manager::QueueManager& _queueManager;
+		//--------------------------------------------------//
+		//				VK Render Configuration				//
+		//--------------------------------------------------//
 		//Pipeline Layout
 		UniqPtr<PipelineLayout> _pipelineLayout { nullptr };
 		//Render Pass
@@ -24,12 +30,20 @@ namespace Graphics
 
 		Vector<VkFramebuffer> _swapchainFramebuffers {};
 
-		VkDevice& _ownerDevice;
-		const Manager::SwapchainManager& _swapManager;
+		//--------------------------------------------------//
+		//				VK Draw Configuration				//
+		//--------------------------------------------------//
+		//TODO : Este RenderDrawer tendrá el Cmnd Pool y el Cmnd Buffer
+		UniqPtr<RenderDrawer> _renderDrawer { nullptr };
+
 
 	public:
 
-		VRenderManager( VkDevice& p_device, const Manager::SwapchainManager& p_swapchainInfo ) noexcept;
+		VRenderManager(
+			VkDevice& p_device,
+			const Manager::SwapchainManager& p_swapchainManager,
+			const Manager::QueueManager& p_queueManager
+		) noexcept;
 
 		~VRenderManager();
 
@@ -38,6 +52,9 @@ namespace Graphics
 
 		void
 		setUpRenderPipeline() noexcept;
+
+		void
+		prepareRenderPipelineDrawing() noexcept;
 
 	private:
 	

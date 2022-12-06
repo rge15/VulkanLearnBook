@@ -6,10 +6,11 @@ namespace Graphics
 {
 	class RenderPipeline
 	{
+	public:
+		VkRenderPass& _renderPass;
 	private:
 		VkDevice& _ownerDevice;
 		VkPipelineLayout& _pipelineLayout;
-		VkRenderPass& _renderPass;
 
 		GraphicPipelineConfigutarion _pipelineConfig;
 

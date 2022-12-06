@@ -7,7 +7,8 @@ namespace Graphics
 	_VDriver { std::make_unique<VDriver>(p_w,p_h) },
 	_VResourceMngr { std::make_unique<VResourceManager>( _VDriver.get()->getVkDevice() ) },
 	_VRenderMngr { std::make_unique<VRenderManager>( _VDriver.get()->getVkDevice(),
-													 _VDriver.get()->getDeviceManager().getSwapchainManager() ) }
+													 _VDriver.get()->getDeviceManager().getSwapchainManager(),
+													 _VDriver.get()->getDeviceManager().getQueueManager() ) }
 	{
 	}
 

@@ -25,6 +25,8 @@ void HelloTriangleApp::mainLoop() noexcept{
 	renderMngr.addPipelineShaderStages( fragmentShader._stageInfo );
 	renderMngr.setUpRenderPipeline();
 
+	renderMngr.prepareRenderPipelineDrawing();
+
 	while(!glfwWindowShouldClose(&window))
 	{
 		glfwPollEvents();
