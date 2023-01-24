@@ -31,10 +31,16 @@ namespace Graphics::Resource
 
 		size_t fileSize = (size_t)file.tellg();
 
-		_code.resize( fileSize );
+		Vector<char> code;
+
+		code.resize( fileSize );
+		_codeInt.resize( fileSize>>2 );
+
 		file.seekg(0);
-		file.read( _code.data(), fileSize );
+		file.read( code.data(), fileSize );
 	
+		memcpy(_codeInt.data(), code.data(), fileSize);
+
 		file.close();
 	}
 
@@ -47,8 +53,8 @@ namespace Graphics::Resource
 		_info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
 		_info.pNext = nullptr;
 		_info.flags = 0;
-		_info.codeSize = _code.size();
-		_info.pCode = reinterpret_cast<const uint32_t*>( _code.data() );
+		_info.codeSize = _codeInt.size() << 2;
+		_info.pCode = _codeInt.data();
 	}
 
 //-----------------------------------------------------------------------------

@@ -156,8 +156,8 @@ namespace Graphics::Manager
 
 	void Device::updateQueueData() noexcept
 	{
-		_queueManager.getGraphicHandler( _device, _graphicsQueueHandler);
-		_queueManager.getPresentHandler( _device, _presentQueueHandler);
+		_queueManager.setGraphicHandler( _device );
+		_queueManager.setPresentHandler( _device );
 		//? If you add a Queue Handler, have to update the updateQueueIdData(); 
 		_queueManager.updateQueueIdData();
 	}

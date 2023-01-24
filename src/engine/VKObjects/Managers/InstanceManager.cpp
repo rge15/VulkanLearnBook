@@ -13,7 +13,7 @@ namespace Graphics::Manager
 		_appInfo.pApplicationName = { p_appName.data() };
 		_appInfo.applicationVersion = { appVer };
 		_appInfo.engineVersion = { engineVer };
-		_appInfo.apiVersion = { VK_MAKE_VERSION(1,0,0) };
+		_appInfo.apiVersion = { VK_MAKE_API_VERSION(0,1,0,0) };
 
 		initInstanceData();
 		createInstance();
@@ -64,6 +64,8 @@ namespace Graphics::Manager
 		_instanceInfo.flags = { 0 };
 		_instanceInfo.enabledExtensionCount = { glfwCountExtension };
 		_instanceInfo.ppEnabledExtensionNames = { glfwExtensions };
+	    std::cout << glfwCountExtension << " extensions enabled for GLFW.\n"; 
+
 
 #ifdef DEBUG
 		setLayerInfo();

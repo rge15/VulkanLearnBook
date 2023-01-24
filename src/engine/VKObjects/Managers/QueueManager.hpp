@@ -11,6 +11,9 @@ namespace Graphics::Manager
 		private:
 			std::vector<VkDeviceQueueCreateInfo> _queueInfo	{};
 			QueueFamilyInfo _queueIndexInfo	{};
+			VkQueue			_presentQueueHandler	{};
+			VkQueue			_graphicsQueueHandler	{};
+
 
 		public:
 			/** @brief Default constructor for QueueManager class */
@@ -67,7 +70,7 @@ namespace Graphics::Manager
 			 * 	@param p_queueHandler VUlkan queue to set the queue handler in
 			*/
 			void
-			getGraphicHandler( VkDevice& p_device, VkQueue& p_queueHandler) const noexcept;
+			setGraphicHandler( VkDevice& p_device ) noexcept;
 
 			/**
 			 * 	@brief Sets the queue handler for the Present queue management to the passed queue handler reference
@@ -76,7 +79,7 @@ namespace Graphics::Manager
 			 * 	@param p_queueHandler Vulkan queue to set the queue handler in
 			*/
 			void
-			getPresentHandler( VkDevice& p_device, VkQueue& p_queueHandler) const noexcept;
+			setPresentHandler( VkDevice& p_device ) noexcept;
 
 			/**
 			 * 	@brief Update the queues data IDs
@@ -95,6 +98,13 @@ namespace Graphics::Manager
 			*/
 			int
 			getPresentQueueId() const noexcept;
+
+			VkQueue&
+			getGraphicQueueHandler() noexcept;
+
+			VkQueue&
+			getPresentQueueHandler() noexcept;
+
 
 	};
 }

@@ -8,8 +8,9 @@ namespace Graphics::Manager
 {
 	class SwapchainManager
 	{
-		private:
+		public:
 			VkSwapchainKHR _swapchain { VK_NULL_HANDLE };
+		private:
 			SwapchainInfo _swapchainInfo {};
 			VkSwapchainCreateInfoKHR _swapchainCreateInfo {};			
 			Vector<VkImage> _swapchainImages {};

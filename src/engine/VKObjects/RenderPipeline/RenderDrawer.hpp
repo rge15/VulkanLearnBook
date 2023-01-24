@@ -11,20 +11,23 @@ namespace Graphics
     {
     private:
 		VkDevice& _ownerDevice;
-		const Manager::SwapchainManager& _swapManager;
-		const Manager::QueueManager& _queueManager;
+		Manager::SwapchainManager& _swapManager;
+		Manager::QueueManager& _queueManager;
         RenderPipeline& _renderPipeline;
         Vector<VkFramebuffer>& _frameBuffers;
 
         VkCommandPool _cmdPool { VK_NULL_HANDLE };
         VkCommandBuffer _cmdBuffer { VK_NULL_HANDLE };
 
+        VkSemaphore _imageReadySemaphore        { VK_NULL_HANDLE };
+        VkSemaphore _renderFinishedSemaphore    { VK_NULL_HANDLE };
+        VkFence     _frameRenderedFence         { VK_NULL_HANDLE };
 
     public:
         RenderDrawer(
 			VkDevice& p_device, 
-			const Manager::SwapchainManager& p_swapchainManager,
-			const Manager::QueueManager& p_queueManager,
+			Manager::SwapchainManager& p_swapchainManager,
+			Manager::QueueManager& p_queueManager,
             RenderPipeline& p_renderPipeline,
             Vector<VkFramebuffer>& p_frameBuffers
         ) noexcept;
@@ -32,7 +35,7 @@ namespace Graphics
         ~RenderDrawer() noexcept;
 
         void
-        recordDrawCommand( const int32_t p_imageIndex) noexcept;
+        draw() noexcept;
 
     private:
         
@@ -43,13 +46,19 @@ namespace Graphics
         allocateCommandBuffer() noexcept;
 
         void
-        beginCmdBuffer() noexcept;
+        beginRecordCmdBuffer() noexcept;
 
         void
         renderPass( const int32_t p_imageIndex ) noexcept;
 
     	void
-    	endCmdBuffer() noexcept;
+    	endRecordCmdBuffer() noexcept;
+
+        void
+        recordDrawCommand( const int32_t p_imageIndex) noexcept;
+
+    	void
+    	createSyncObjects() noexcept;
 
     };
     

@@ -4,8 +4,8 @@ namespace Graphics
 {
     RenderDrawer::RenderDrawer(
         VkDevice& p_device, 
-        const Manager::SwapchainManager& p_swapchainManager,
-        const Manager::QueueManager& p_queueManager,
+        Manager::SwapchainManager& p_swapchainManager,
+        Manager::QueueManager& p_queueManager,
 		RenderPipeline& p_renderPipeline,
         Vector<VkFramebuffer>& p_frameBuffers
 	) noexcept
@@ -15,8 +15,9 @@ namespace Graphics
     , _renderPipeline { p_renderPipeline }
 	, _frameBuffers { p_frameBuffers }
 	{
-        reserveCommandPool();
+		reserveCommandPool();
         allocateCommandBuffer();
+		createSyncObjects();
     }
 
 //-----------------------------------------------------------------------------
@@ -65,24 +66,25 @@ namespace Graphics
 
 		ASSERT( (result==VK_SUCCESS), "Error allocating the Command Buffer (:vC) " )
 
-		std::cout << " Command Buffer created very well (:vD) " << '\n';	
+		std::cout << " Command Buffer created very well (:vD) " << '\n';
 	}
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-	//TODO : Hacer el record de el commando de dibujado
 	void
 	RenderDrawer::recordDrawCommand( const int32_t p_imageIndex ) noexcept
 	{
-		beginCmdBuffer();
+		beginRecordCmdBuffer();
 		renderPass( p_imageIndex );
-		endCmdBuffer();
+		endRecordCmdBuffer();
 	}
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 	void
-	RenderDrawer::beginCmdBuffer() noexcept
+	RenderDrawer::beginRecordCmdBuffer() noexcept
 	{
 		VkCommandBufferBeginInfo cmdBegin {};
 
@@ -94,7 +96,11 @@ namespace Graphics
 		VkResult result = vkBeginCommandBuffer( _cmdBuffer, &cmdBegin );
 
 		ASSERT( (result==VK_SUCCESS), "Error begining the Command Buffer (:vC) " )
+
 	}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 	void
 	RenderDrawer::renderPass( const int32_t p_imageIndex ) noexcept
@@ -139,12 +145,91 @@ namespace Graphics
 
 	}
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
 	void
-	RenderDrawer::endCmdBuffer() noexcept
+	RenderDrawer::endRecordCmdBuffer() noexcept
 	{
 		VkResult result = vkEndCommandBuffer(_cmdBuffer);
 
 		ASSERT( (result==VK_SUCCESS), "Error ending the Command Buffer (:vC) " )
 	}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+	void
+	RenderDrawer::draw() noexcept
+	{
+		vkWaitForFences( _ownerDevice, 1, &_frameRenderedFence, VK_TRUE, UINT64_MAX );
+		vkResetFences( _ownerDevice, 1, &_frameRenderedFence );
+		
+		uint32_t imageIndex {};
+
+		//TODO : Aquí el owner device debe ser el de la swapchain, no el de renderDrawer
+		//Get SwapchainImage
+		vkAcquireNextImageKHR( _ownerDevice, _swapManager._swapchain, UINT64_MAX, _imageReadySemaphore, VK_NULL_HANDLE, &imageIndex);
+
+		//Record Cmd
+		vkResetCommandBuffer( _cmdBuffer, 0 );
+		recordDrawCommand( imageIndex );
+
+		//Submit Cmd
+		VkSubmitInfo _submitInfo {};
+		const VkPipelineStageFlags waitStage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+
+		_submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+		_submitInfo.pNext = nullptr;
+		_submitInfo.commandBufferCount = 1;
+		_submitInfo.pCommandBuffers = &_cmdBuffer;
+		_submitInfo.waitSemaphoreCount = 1;
+		_submitInfo.pWaitSemaphores = &_imageReadySemaphore;
+		_submitInfo.signalSemaphoreCount = 1;
+		_submitInfo.pSignalSemaphores = &_renderFinishedSemaphore;
+		_submitInfo.pWaitDstStageMask = &waitStage;
+
+		//TODO : Obtener el graphicQueueHandler
+		VkResult result = vkQueueSubmit( _queueManager.getGraphicQueueHandler() , 1, &_submitInfo, _frameRenderedFence );
+		ASSERT( (result==VK_SUCCESS), "Error submiting command buffer (:vC) " )
+		
+		//Present Swapchain
+		VkPresentInfoKHR presentInfo {};
+		presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+		presentInfo.pNext = nullptr;
+		presentInfo.swapchainCount = 1;
+		presentInfo.pSwapchains = &_swapManager._swapchain;
+		presentInfo.waitSemaphoreCount = 1;
+		presentInfo.pWaitSemaphores = &_renderFinishedSemaphore;
+		presentInfo.pImageIndices = &imageIndex;
+		presentInfo.pResults = nullptr;
+
+		vkQueuePresentKHR( _queueManager.getPresentQueueHandler(), &presentInfo );
+	}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+	void
+	RenderDrawer::createSyncObjects() noexcept
+	{
+		VkSemaphoreCreateInfo sempahoreInfo {};
+		sempahoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+	
+		VkFenceCreateInfo fenceInfo {};
+		fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+		fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+
+		VkResult result = vkCreateSemaphore( _ownerDevice, &sempahoreInfo, nullptr, &_imageReadySemaphore);
+		ASSERT( (result==VK_SUCCESS), "Error creating sync object semaphore 1 (:vC) " )
+
+		result = vkCreateSemaphore( _ownerDevice, &sempahoreInfo, nullptr, &_renderFinishedSemaphore);
+		ASSERT( (result==VK_SUCCESS), "Error creating sync object semaphore 2 (:vC) " )
+
+		result = vkCreateFence( _ownerDevice, &fenceInfo, nullptr, &_frameRenderedFence );
+		ASSERT( (result==VK_SUCCESS), "Error creating sync object fence (:vC) " )
+
+	}
+
 
 }

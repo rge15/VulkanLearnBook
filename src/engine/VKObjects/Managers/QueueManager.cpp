@@ -42,19 +42,38 @@ namespace Graphics::Manager
 	//-------------------------------------------------------------------------
 
 	void
-	QueueManager::getGraphicHandler( VkDevice& p_device, VkQueue& p_queueHandler) const noexcept
+	QueueManager::setGraphicHandler( VkDevice& p_device ) noexcept
 	{
-		vkGetDeviceQueue( p_device, _queueIndexInfo._graphicsFamilyQueueIndex.getValue(), 0, &p_queueHandler);
+		vkGetDeviceQueue( p_device, _queueIndexInfo._graphicsFamilyQueueIndex.getValue(), 0, &_graphicsQueueHandler);
 	}
 
 	//-------------------------------------------------------------------------
 	//-------------------------------------------------------------------------
 
 	void
-	QueueManager::getPresentHandler( VkDevice& p_device, VkQueue& p_queueHandler) const noexcept
+	QueueManager::setPresentHandler( VkDevice& p_device ) noexcept
 	{
-		vkGetDeviceQueue( p_device, _queueIndexInfo._presentFamilyQueueIndex.getValue(), 0, &p_queueHandler);
+		vkGetDeviceQueue( p_device, _queueIndexInfo._presentFamilyQueueIndex.getValue(), 0, &_presentQueueHandler);
 	}
+
+	//-------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
+
+	VkQueue&
+	QueueManager::getGraphicQueueHandler() noexcept
+	{
+		return _graphicsQueueHandler;
+	}
+
+	//-------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
+
+	VkQueue&
+	QueueManager::getPresentQueueHandler() noexcept
+	{
+		return _presentQueueHandler;
+	}
+
 
 	//-------------------------------------------------------------------------
 	//-------------------------------------------------------------------------

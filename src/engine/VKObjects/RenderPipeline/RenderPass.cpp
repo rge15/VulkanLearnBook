@@ -63,8 +63,16 @@ namespace Graphics
 		_createInfo.subpassCount = _subpassDescriptor.size();
 		_createInfo.pSubpasses = _subpassDescriptor.data();
 
-		_createInfo.dependencyCount = 0;
-		_createInfo.pDependencies = nullptr;
+		_dependencyInfo.dependencyFlags = 0;
+		_dependencyInfo.srcSubpass = VK_SUBPASS_EXTERNAL;
+		_dependencyInfo.dstSubpass = 0;
+		_dependencyInfo.srcStageMask = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+		_dependencyInfo.srcAccessMask = 0;
+		_dependencyInfo.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+		_dependencyInfo.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+
+		_createInfo.dependencyCount = 1;
+		_createInfo.pDependencies = &_dependencyInfo;
 	}
 
 //-----------------------------------------------------------------------------

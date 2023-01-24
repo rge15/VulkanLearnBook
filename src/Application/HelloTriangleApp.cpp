@@ -27,10 +27,17 @@ void HelloTriangleApp::mainLoop() noexcept{
 
 	renderMngr.prepareRenderPipelineDrawing();
 
+	auto* drawer = renderMngr.getDrawer();
+	
+
+
 	while(!glfwWindowShouldClose(&window))
 	{
 		glfwPollEvents();
+		drawer->draw();
 	}
+
+	vkDeviceWaitIdle( engine._VDriver.get()->getVkDevice() );
 
 }
 

@@ -56,11 +56,11 @@ namespace Graphics::Manager
 			 *
 			 * 	@return Reference to the Vulkan Swapchain manager
 			*/
-			const SwapchainManager&
-			getSwapchainManager() const noexcept { return _swapchain; }
+			SwapchainManager&
+			getSwapchainManager() noexcept { return _swapchain; }
 
-			const QueueManager&
-			getQueueManager() const noexcept { return _queueManager; }
+			QueueManager&
+			getQueueManager() noexcept { return _queueManager; }
 			
 
 		private:

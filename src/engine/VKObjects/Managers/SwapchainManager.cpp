@@ -88,6 +88,7 @@ namespace Graphics::Manager
 		getImages( p_device );
 
 		getImageViews( p_device );
+	
 	}
 
 	//-------------------------------------------------------------------------

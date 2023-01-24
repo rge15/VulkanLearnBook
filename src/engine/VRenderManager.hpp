@@ -12,10 +12,12 @@ namespace Graphics
 {
 	class VRenderManager
 	{
+	public:
+		Manager::SwapchainManager& _swapManager;
+
 	private:
 		VkDevice& _ownerDevice;
-		const Manager::SwapchainManager& _swapManager;
-		const Manager::QueueManager& _queueManager;
+		Manager::QueueManager& _queueManager;
 		//--------------------------------------------------//
 		//				VK Render Configuration				//
 		//--------------------------------------------------//
@@ -41,8 +43,8 @@ namespace Graphics
 
 		VRenderManager(
 			VkDevice& p_device,
-			const Manager::SwapchainManager& p_swapchainManager,
-			const Manager::QueueManager& p_queueManager
+			Manager::SwapchainManager& p_swapchainManager,
+			Manager::QueueManager& p_queueManager
 		) noexcept;
 
 		~VRenderManager();
@@ -55,6 +57,9 @@ namespace Graphics
 
 		void
 		prepareRenderPipelineDrawing() noexcept;
+
+		RenderDrawer* const
+		getDrawer() const noexcept;
 
 	private:
 	

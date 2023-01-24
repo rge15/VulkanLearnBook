@@ -19,5 +19,8 @@ using Tuple = std::tuple<T...>;
 template <typename T, typename V>
 using Map = std::map<T,V>;
 
+template <typename T>
+using Optional = std::optional<T>;
+
 using JoyID = size_t;
 

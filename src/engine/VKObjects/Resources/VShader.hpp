@@ -22,7 +22,7 @@ namespace Graphics::Resource
 			//Shader Type 
 			ShaderType _shaderType;
 			//Shader code
-			Vector<char> _code;
+			Vector<uint32_t> _codeInt;
 			//Shader Module Info
 			VkShaderModuleCreateInfo _info;
 

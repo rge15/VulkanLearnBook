@@ -5,8 +5,8 @@ namespace Graphics
 
 	VRenderManager::VRenderManager( 
 		VkDevice& p_device,
-		const Manager::SwapchainManager& p_swapManager,
-		const Manager::QueueManager& p_queueManager
+		Manager::SwapchainManager& p_swapManager,
+		Manager::QueueManager& p_queueManager
 	) noexcept
 	: _swapManager { p_swapManager }
 	, _ownerDevice { p_device }
@@ -33,7 +33,7 @@ namespace Graphics
 	void
 	VRenderManager::addPipelineShaderStages( VkPipelineShaderStageCreateInfo& p_shader ) noexcept
 	{
-		_pipelineShaders.push_back( p_shader );	
+		_pipelineShaders.push_back( p_shader );
 	}
 
 //-----------------------------------------------------------------------------
@@ -121,6 +121,20 @@ namespace Graphics
 			std::cout << "Render Drawer already setted (;vD)" << '\n';
 
 	}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+	RenderDrawer* const
+	VRenderManager::getDrawer() const noexcept
+	{
+
+		if(_renderDrawer.get() != nullptr)
+			return _renderDrawer.get();
+		
+		std::cout << "Render Drawer is not setted (:vc)" << '\n';
+		return nullptr;
+	};
 
 
 }

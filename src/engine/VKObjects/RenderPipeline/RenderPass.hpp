@@ -11,7 +11,8 @@ namespace Graphics
 	private:
 		VkDevice& _ownerDevice;
 
-		VkRenderPassCreateInfo _createInfo {};
+		VkRenderPassCreateInfo _createInfo	{};
+		VkSubpassDependency _dependencyInfo	{};
 
 		Vector<VkAttachmentDescription> _attachmentDescriptor {};
 		Vector<VkAttachmentReference> _attachmentReferences {};

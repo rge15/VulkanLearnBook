@@ -18,8 +18,6 @@ namespace Graphics::Manager
 		VkExtent2D			_swapchainExtent	{};
 
 
-		VkSwapchainKHR _swapchain { VK_NULL_HANDLE };
-
 		/**
 		 * 	@brief Checks if the physical device fits the swapchain and surface requeriments
 		 * 
